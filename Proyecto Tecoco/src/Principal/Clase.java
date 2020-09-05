@@ -16,5 +16,69 @@ public class Clase {
     private String nombre;
     private HashMap<String,Metodo> metodos = new HashMap<>();
     private HashMap<String, Atributo> atributos = new HashMap<>();
+    public static HashMap<String, Clase> clases = new HashMap<>();
+
+    public Clase(String nombre) {
+        this.nombre = nombre;
+        this.metodos = new HashMap<>();
+        this.atributos = new HashMap<>();
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public HashMap<String, Metodo> getMetodos() {
+        return metodos;
+    }
+
+    public void setMetodos(HashMap<String, Metodo> metodos) {
+        this.metodos = metodos;
+    }
+
+    public HashMap<String, Atributo> getAtributos() {
+        return atributos;
+    }
+
+    public void setAtributos(HashMap<String, Atributo> atributos) {
+        this.atributos = atributos;
+    }
+
+    public static HashMap<String, Clase> getClases() {
+        return clases;
+    }
+
+    public static void setClases(HashMap<String, Clase> clases) {
+        Clase.clases = clases;
+    }
+    
+    public void addMetodo(Metodo metodo){
+        if(!this.metodos.containsKey(metodo.getNombre())){
+            this.metodos.put(metodo.getNombre(), metodo);
+        }
+    }
+    
+    public void addAtributos(Atributo atributo){
+        if(!this.atributos.containsKey(atributo.getNombre())){
+            this.atributos.put(atributo.getNombre(), atributo);
+        }
+    }
+    
+    public static Clase addClase(Clase clase){
+        if(!clases.containsKey(clase.getNombre())){
+            clases.put(clase.getNombre(), clase);
+            return clase;
+        }
+        return clases.get(clase.getNombre());
+    }
+
+    @Override
+    public String toString() {
+        return "Clase{" + "nombre=" + nombre + ", metodos=" + metodos + ", atributos=" + atributos + '}';
+    }
     
 }

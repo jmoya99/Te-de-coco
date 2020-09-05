@@ -5,6 +5,8 @@
  */
 package Principal;
 
+import java.util.HashMap;
+
 /**
  *
  * @author juan
@@ -13,5 +15,48 @@ public class Atributo {
     
     private String nombre;
     private Clase clase;
+    public static HashMap<Integer, Atributo> atributos = new HashMap<>();
+
+    public Atributo(String nombre, Clase clase) {
+        this.nombre = nombre;
+        this.clase = clase;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Clase getClase() {
+        return clase;
+    }
+
+    public void setClase(Clase clase) {
+        this.clase = clase;
+    }
+
+    public static HashMap<Integer, Atributo> getAtributos() {
+        return atributos;
+    }
+
+    public static void setAtributos(HashMap<Integer, Atributo> atributos) {
+        Atributo.atributos = atributos;
+    }
+    
+    public static Atributo addAtributo(Atributo atributo, int id){
+        if(!atributos.containsKey(id)){
+            atributos.put(id, atributo);
+            return atributo;
+        }
+        return atributos.get(id);
+    }
+    
+    @Override
+    public String toString() {
+        return "Atributo{" + "nombre=" + nombre + ", clase=" + clase.getNombre() + '}';
+    }
     
 }
