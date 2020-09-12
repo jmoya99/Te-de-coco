@@ -15,7 +15,6 @@ public class Atributo {
     
     private String nombre;
     private Clase clase;
-    public static HashMap<Integer, Atributo> atributos = new HashMap<>();
 
     public Atributo(String nombre, Clase clase) {
         this.nombre = nombre;
@@ -36,22 +35,6 @@ public class Atributo {
 
     public void setClase(Clase clase) {
         this.clase = clase;
-    }
-
-    public static HashMap<Integer, Atributo> getAtributos() {
-        return atributos;
-    }
-
-    public static void setAtributos(HashMap<Integer, Atributo> atributos) {
-        Atributo.atributos = atributos;
-    }
-    
-    public static Atributo addAtributo(Atributo atributo, int id){
-        if(!atributos.containsKey(id)){
-            atributos.put(id, atributo);
-            return atributo;
-        }
-        return atributos.get(id);
     }
     
     @Override

@@ -18,7 +18,6 @@ public class Metodo {
     private HashMap<String,Atributo> parametros;
     private HashMap<String,Rol> roles;
     private Clase clase;
-    public static HashMap<Integer, Metodo> metodos = new HashMap<>();
 
     public Metodo(String nombre, Clase clase) {
         this.nombre = nombre;
@@ -67,14 +66,6 @@ public class Metodo {
     public void setClase(Clase clase) {
         this.clase = clase;
     }
-
-    public static HashMap<Integer, Metodo> getMetodos() {
-        return metodos;
-    }
-
-    public static void setMetodos(HashMap<Integer, Metodo> metodos) {
-        Metodo.metodos = metodos;
-    }
     
     public void addRol(Rol rol){
         if(!this.roles.containsKey(rol.getNombre())){
@@ -82,23 +73,17 @@ public class Metodo {
         }
     }
     
-    public void addParametro(Atributo atributo){
+    public Atributo addParametro(Atributo atributo){
         if(!this.parametros.containsKey(atributo.getNombre())){
             this.parametros.put(atributo.getNombre(), atributo);
+            return atributo;
         }
-    }
-    
-    public static Metodo addMetodo(Metodo metodo, int id){
-        if(!metodos.containsKey(id)){
-            metodos.put(id, metodo);
-            return metodo;
-        }
-        return metodos.get(id);
+        return this.parametros.get(atributo.getNombre());
     }
 
     @Override
     public String toString() {
-        return "Metodo{" + "nombre=" + nombre + ", contenido=" + contenido + ", parametros=" + parametros + ", roles=" + roles + ", clase=" + clase.getNombre() + '}';
+        return "Metodo{" + "nombre=" + nombre + ", contenido=" + contenido + ", clase=" + clase.getNombre() + '}';
     }
     
     

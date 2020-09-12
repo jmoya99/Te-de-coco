@@ -27,10 +27,10 @@ public class Main {
                     
                     Clase clase = Clase.addClase(new Clase(tarea[2]));
                     
-                    Metodo metodo = Metodo.addMetodo(new Metodo(tarea[1], clase),
-                            fila.getId());
-                    
-                    clase.addMetodo(metodo);
+                    Metodo metodo = clase.addMetodo(new Metodo(tarea[1], clase));
+                    System.out.println(metodo);
+                    System.out.println("__________________________________");
+                    System.out.println(clase);
                     
                     metodo.addRol(rol);
                     
@@ -42,11 +42,9 @@ public class Main {
                 //    break;
             }
         }
-        
-        for (Metodo m : Metodo.metodos.values()) {
-            System.out.println(m.getNombre());
-            for (String string : m.getRoles().keySet()) {
-                System.out.println(string);
+        for (Clase clase : Clase.clases.values()) {
+            for (Metodo metodo : clase.getMetodos().values()) {
+                System.out.println(metodo);
             }
         }
         

@@ -56,16 +56,20 @@ public class Clase {
         Clase.clases = clases;
     }
     
-    public void addMetodo(Metodo metodo){
+    public Metodo addMetodo(Metodo metodo){
         if(!this.metodos.containsKey(metodo.getNombre())){
             this.metodos.put(metodo.getNombre(), metodo);
+            return metodo;
         }
+        return this.metodos.get(metodo.getNombre());
     }
     
-    public void addAtributos(Atributo atributo){
+    public Atributo addAtributos(Atributo atributo){
         if(!this.atributos.containsKey(atributo.getNombre())){
             this.atributos.put(atributo.getNombre(), atributo);
+            return atributo;
         }
+        return this.atributos.get(atributo.getNombre());
     }
     
     public static Clase addClase(Clase clase){
@@ -78,7 +82,7 @@ public class Clase {
 
     @Override
     public String toString() {
-        return "Clase{" + "nombre=" + nombre + ", metodos=" + metodos + ", atributos=" + atributos + '}';
+        return "Clase{" + "nombre=" + nombre +'}';
     }
     
 }
