@@ -17,37 +17,38 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        HashMap<Integer,Elemento> csv = CSV.leerArchivo();
+        HashMap<Integer, Elemento> csv = CSV.leerArchivo();
         for (Elemento fila : csv.values()) {
-            switch (fila.getArtefacto()){
-                case "Tarea":
-                    String tarea[] = fila.getContenido().split(" ");
-                    
-                    Rol rol = Rol.addRol(new Rol(tarea[0]));
-                    
-                    Clase clase = Clase.addClase(new Clase(tarea[2]));
-                    
-                    Metodo metodo = clase.addMetodo(new Metodo(tarea[1], clase));
-                    System.out.println(metodo);
-                    System.out.println("__________________________________");
-                    System.out.println(clase);
-                    
-                    metodo.addRol(rol);
-                    
-                    rol.addMetodo(metodo);
-                    
-                    break;
-                //case "Objeto de datos":
-                //    String tarea[] = fila.getContenido();
-                //    break;
+            if (fila.getArtefacto().equals("Tarea")) {
+                String tarea[] = fila.getContenido().split(" ");
+
+                Rol rol = Rol.addRol(new Rol(tarea[0]));
+
+                Clase clase = Clase.addClase(new Clase(tarea[2]));
+
+                Metodo metodo = clase.addMetodo(new Metodo(tarea[1], clase));
+
+                metodo.addRol(rol);
+
+                rol.addMetodo(metodo);
             }
         }
-        for (Clase clase : Clase.clases.values()) {
-            for (Metodo metodo : clase.getMetodos().values()) {
-                System.out.println(metodo);
-            }
-        }
+
         
-        //System.out.println(new HashMap<Integer, Integer>());
+        for (Elemento fila : csv.values()) {
+            System.out.println(fila);
+            if (fila.getArtefacto().equals("Almacén de datos")) {
+                String almacen[] = fila.getContenido().split(" ");
+                Clase clase = Clase.addClase(new Clase(almacen[0]));
+                for(int i = 1; i < almacen.length; i++){
+                    if(almacen[i].charAt(0) == '#'){
+                        Atributo atributo = clase.addAtributo(new Atributo(almacen[i].substring(1), clase));
+                        atributo.setIsPrimary(true);
+                    } else {
+                        clase.addAtributo(new Atributo(almacen[i], clase));
+                    }
+                }
+            } 
+        }
     }
 }

@@ -64,7 +64,7 @@ public class Clase {
         return this.metodos.get(metodo.getNombre());
     }
     
-    public Atributo addAtributos(Atributo atributo){
+    public Atributo addAtributo(Atributo atributo){
         if(!this.atributos.containsKey(atributo.getNombre())){
             this.atributos.put(atributo.getNombre(), atributo);
             return atributo;

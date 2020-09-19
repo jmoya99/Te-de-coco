@@ -20,11 +20,11 @@ import javax.lang.model.element.Element;
 public class CSV {
 
     //Recuperado de http://chuwiki.chuidiang.org/index.php?title=Leer_fichero_CSV_con_Java
-    public static HashMap<Integer,Elemento> leerArchivo() {
-        int id,origen,destino;
+    public static HashMap<Integer, Elemento> leerArchivo() {
+        int id, origen, destino;
         String artefacto, contenido;
-        HashMap<Integer,Elemento> elementos = new HashMap<>();
-        String separador = ";";
+        HashMap<Integer, Elemento> elementos = new HashMap<>();
+        String separador = ",";
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader("Te de coco.csv"));
@@ -32,17 +32,20 @@ public class CSV {
             line = br.readLine();
             while (null != line) {
                 String[] fields = line.split(separador);
-                id = Integer.parseInt(fields[0]);
-                artefacto = fields[1];
-                origen = Integer.parseInt((!fields[6].equals("") ? fields[6] : "0"));
-                destino = Integer.parseInt((!fields[7].equals("") ? fields[7] : "0"));
-                contenido = "";
-                if(fields.length == 11){
-                    contenido = fields[10];
-                }else if(fields.length == 12){
-                    contenido = fields[11];
+                if (!fields[1].equals("Página")) {
+                    id = Integer.parseInt(fields[0]);
+                    artefacto = fields[1];
+                    origen = Integer.parseInt((!fields[6].equals("") ? fields[6] : "0"));
+                    destino = Integer.parseInt((!fields[7].equals("") ? fields[7] : "0"));
+                    contenido = "";
+                    if (fields.length == 11) {
+                        contenido = fields[10];
+                    } else if (fields.length == 12) {
+                        contenido = fields[11];
+                    }
+                    elementos.put(id, new Elemento(id, artefacto, origen, destino, contenido));
+                    
                 }
-                elementos.put(id, new Elemento(id, artefacto, origen, destino, contenido));
                 line = br.readLine();
             }
         } catch (Exception e) {
@@ -56,7 +59,7 @@ public class CSV {
                 }
             }
         }
-        
+
         return elementos;
     }
 }

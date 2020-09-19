@@ -15,10 +15,19 @@ public class Atributo {
     
     private String nombre;
     private Clase clase;
+    private boolean isPrimary = false;
 
     public Atributo(String nombre, Clase clase) {
         this.nombre = nombre;
         this.clase = clase;
+    }
+
+    public boolean isIsPrimary() {
+        return isPrimary;
+    }
+
+    public void setIsPrimary(boolean isPrimary) {
+        this.isPrimary = isPrimary;
     }
 
     public String getNombre() {
@@ -36,10 +45,12 @@ public class Atributo {
     public void setClase(Clase clase) {
         this.clase = clase;
     }
-    
+
     @Override
     public String toString() {
-        return "Atributo{" + "nombre=" + nombre + ", clase=" + clase.getNombre() + '}';
+        return "Atributo{" + "nombre=" + nombre + ", clase=" + clase + ", isPrimary=" + isPrimary + '}';
     }
+    
+    
     
 }
