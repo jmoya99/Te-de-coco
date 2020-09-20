@@ -5,13 +5,25 @@
  */
 package Principal;
 
+import UpperEssential.UpperEssentialLookAndFeel;
+import java.io.File;
 import java.util.HashMap;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
  * @author cj4
  */
 public class Main {
+    
+    public static void main(String[] args) throws UnsupportedLookAndFeelException {
+        UIManager.setLookAndFeel(new UpperEssentialLookAndFeel(""));
+        InterfazDeEntrada frame = new InterfazDeEntrada();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        //interpretar();
+    }
 
     public static Metodo buscarMetodo(Elemento elemento, HashMap<Integer, Elemento> csv){
         Metodo metodo;
@@ -29,8 +41,8 @@ public class Main {
         return null;
     }
     
-    public static void main(String[] args) {
-        HashMap<Integer, Elemento> csv = CSV.leerArchivo();
+    public static void interpretar(File archivo) throws Exception{
+        HashMap<Integer, Elemento> csv = CSV.leerArchivo(archivo);
         for (Elemento fila : csv.values()) {
             if (fila.getArtefacto().equals("Tarea")) {
                 String tarea[] = fila.getContenido().split(" ");
@@ -66,6 +78,5 @@ public class Main {
                 metodo.addParametro(atributo);
             }
         }
-        
     }
 }
