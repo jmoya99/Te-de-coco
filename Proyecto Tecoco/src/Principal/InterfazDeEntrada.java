@@ -6,6 +6,7 @@
 package Principal;
 
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -69,22 +70,9 @@ public class InterfazDeEntrada extends JFrame {
         btnCrear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg) {
-                btnSeleccionar.setEnabled(false);
-                btnEliminar.setEnabled(false);
-                btnCrear.setEnabled(false);
-                for (File csv : csvs) {
-                    try {
-                        Main.interpretar(csv);
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null, "Ha ocurrido un "
-                                + "error al interpretar el archivo, confirme"
-                                + " que es un archivo valido", "Error", JOptionPane.ERROR_MESSAGE);
-                        btnSeleccionar.setEnabled(true);
-                        btnEliminar.setEnabled(true);
-                        btnCrear.setEnabled(true);
-                    }
-                }
+                generarProyecto();
             }
+
         });
 
         btnEliminar.addActionListener(new ActionListener() {
@@ -138,6 +126,30 @@ public class InterfazDeEntrada extends JFrame {
                 }
             }
         });
+    }
+
+    private void generarProyecto() {
+        btnSeleccionar.setEnabled(false);
+        btnEliminar.setEnabled(false);
+        btnCrear.setEnabled(false);
+        try {
+            String nom = JOptionPane.showInputDialog("Ingrese el nombre del proyecto");
+            Traductor.nombreProyecto(nom);
+            for (File csv : csvs) {
+                Main.interpretar(csv);
+            }
+            Traductor.copiarDirectorio(Traductor.o, Traductor.d);
+            Traductor.generarFormulariosGenericos();
+            File fichero = new File("Resultado");
+            JOptionPane.showMessageDialog(null, "Su proyecto fue creado en "+fichero.getAbsolutePath());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Ha ocurrido un "
+                    + "error al interpretar el archivo, confirme"
+                    + " que es un archivo valido", "Error", JOptionPane.ERROR_MESSAGE);
+            btnSeleccionar.setEnabled(true);
+            btnEliminar.setEnabled(true);
+            btnCrear.setEnabled(true);
+        }
     }
 
 }
