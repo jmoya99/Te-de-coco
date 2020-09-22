@@ -6,6 +6,7 @@
 package Principal;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,14 +21,14 @@ import javax.lang.model.element.Element;
 public class CSV {
 
     //Recuperado de http://chuwiki.chuidiang.org/index.php?title=Leer_fichero_CSV_con_Java
-    public static HashMap<Integer, Elemento> leerArchivo() {
+    public static HashMap<Integer, Elemento> leerArchivo(File archivo) {
         int id, origen, destino;
         String artefacto, contenido;
         HashMap<Integer, Elemento> elementos = new HashMap<>();
         String separador = ",";
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new FileReader("Te de coco.csv"));
+            br = new BufferedReader(new FileReader(archivo));
             String line = br.readLine();
             line = br.readLine();
             while (null != line) {
@@ -43,7 +44,7 @@ public class CSV {
                     } else if (fields.length == 12) {
                         contenido = fields[11];
                     }
-                    elementos.put(id, new Elemento(id, artefacto, origen, destino, contenido));
+                    elementos.put(id, new Elemento(id, artefacto, origen, destino, contenido.toLowerCase()));
                     
                 }
                 line = br.readLine();

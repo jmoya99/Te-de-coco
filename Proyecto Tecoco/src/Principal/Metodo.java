@@ -14,14 +14,12 @@ import java.util.HashMap;
 public class Metodo {
     
     private String nombre;
-    private String contenido;
     private HashMap<String,Atributo> parametros;
     private HashMap<String,Rol> roles;
     private Clase clase;
 
     public Metodo(String nombre, Clase clase) {
         this.nombre = nombre;
-        this.contenido = "";
         this.parametros = new HashMap<>();
         this.roles = new HashMap<>();
         this.clase = clase;
@@ -33,14 +31,6 @@ public class Metodo {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getContenido() {
-        return contenido;
-    }
-
-    public void setContenido(String contenido) {
-        this.contenido = contenido;
     }
 
     public HashMap<String, Atributo> getParametros() {
@@ -83,7 +73,7 @@ public class Metodo {
 
     @Override
     public String toString() {
-        return "Metodo{" + "nombre=" + nombre + ", contenido=" + contenido + ", clase=" + clase.getNombre() + '}';
+        return "Metodo{" + "nombre=" + nombre + ", clase=" + clase.getNombre() + '}';
     }
     
     
