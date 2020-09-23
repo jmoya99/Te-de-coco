@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Vector;
 
 /**
  *
@@ -92,6 +93,85 @@ public class Traductor {
         }
     }
 
+    // función para generar formulario de registro y modificación
+    public static void generarRM() {
+        for (Rol rol : Rol.roles.values()) {
+            for (Metodo metodo : rol.getMetodos().values()) {
+                if (metodo.getNombre().equals("registra") || metodo.getNombre().equals("modifica")) {
+                    File archivo = null;
+                    FileReader fr = null;
+                    BufferedReader br = null;
+                    try {
+                        // Apertura del fichero y creacion de BufferedReader para poder
+                        // hacer una lectura comoda (disponer del metodo readLine()).
+                        archivo = new File("Plantillas/formulario.txt");
+                        fr = new FileReader(archivo);
+                        br = new BufferedReader(fr);
+                        // Lectura del fichero
+                        String documento = "", linea;
+                        while ((linea = br.readLine()) != null) {
+                            documento += "\n" + linea;
+                        }
+                        String campos = "";
+                        Vector<String> Campos = new Vector<>();
+                        for (Atributo atributo : metodo.getClase().getAtributos().values()) {
+                            if(atributo.getNombre().equals("nombre") || atributo.getNombre().equals("identificacion")){
+                                Campos.add(0, atributo.getNombre());
+                            } else {
+                                Campos.add(atributo.getNombre());
+                            }
+                        }
+                        
+                        for (String atributo : Campos) {
+                            campos += campoDeTexto(atributo.replace("_", " "))+"\n";
+                        }
+                        documento = documento.replace("<--campos-->", campos);                       
+                        
+                        switch (metodo.getNombre()){
+                            case "modifica":
+                                documento = documento.replace("<--titulo-->", "MODIFICAR "+metodo.getClase().getNombre());
+                                documento = documento.replace("<--accion-->", "Modificar");
+                                 break;
+                            case "registra":
+                                documento = documento.replace("<--titulo-->", "REGISTRAR "+metodo.getClase().getNombre());
+                                documento = documento.replace("<--accion-->", "Registrar");
+                                break;
+                            default:
+                                documento = documento.replace("<--titulo-->", metodo.getNombre()+" "+metodo.getClase().getNombre());
+                                documento = documento.replace("<--accion-->", metodo.getNombre());
+                                break;
+                        }
+                        
+                        //Crear el archivo
+                        File file = new File(d + "/"+rol.getNombre()+metodo.getNombre()+".html");
+                        // Si el archivo no existe es creado
+                        if (!file.exists()) {
+                            file.createNewFile();
+                        }
+                        FileWriter fw = new FileWriter(file);
+                        BufferedWriter bw = new BufferedWriter(fw);
+                        bw.write(documento);
+                        bw.close();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        // En el finally cerramos el fichero, para asegurarnos
+                        // que se cierra tanto si todo va bien como si salta 
+                        // una excepcion.
+                        try {
+                            if (null != fr) {
+                                fr.close();
+                            }
+                        } catch (Exception e2) {
+                            e2.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     public static String campoDeTexto(String nombre) {
         return "<div class=\"form-group\"><label for=\"subject\">" + nombre + "</label>"
                 + "<input class=\"form-control item\" type=\"text\" id=\"" + nombre + "\""

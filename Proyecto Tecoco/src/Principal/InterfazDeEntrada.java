@@ -140,6 +140,7 @@ public class InterfazDeEntrada extends JFrame {
             }
             Traductor.copiarDirectorio(Traductor.o, Traductor.d);
             Traductor.generarFormulariosGenericos();
+            Traductor.generarRM();
             File fichero = new File("Resultado");
             JOptionPane.showMessageDialog(null, "Su proyecto fue creado en "+fichero.getAbsolutePath());
         } catch (Exception ex) {
