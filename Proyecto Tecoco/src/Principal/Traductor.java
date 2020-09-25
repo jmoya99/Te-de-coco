@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Vector;
 
 /**
@@ -30,8 +31,8 @@ public class Traductor {
 
     public static final String o = "Plantillas/Plantilla HTML";
     public static String d = "Resultado/";
-    
-    public static void nombreProyecto(String nombre){
+
+    public static void nombreProyecto(String nombre) {
         d += nombre;
     }
 
@@ -57,14 +58,14 @@ public class Traductor {
                         }
                         String campos = "";
                         for (Atributo atributo : metodo.getParametros().values()) {
-                            campos += campoDeTexto(atributo.getNombre())+"\n";
+                            campos += campoDeTexto(atributo.getNombre()) + "\n";
                         }
                         documento = documento.replace("<--campos-->", campos);
                         documento = documento.replace("<--accion-->", metodo.getNombre());
-                        documento = documento.replace("<--titulo-->", metodo.getNombre()+" "+metodo.getClase().getNombre());
+                        documento = documento.replace("<--titulo-->", metodo.getNombre() + " " + metodo.getClase().getNombre());
 
                         //Crear el archivo
-                        File file = new File(d + "/"+rol.getNombre()+metodo.getNombre()+".html");
+                        File file = new File(d + "/" + rol.getNombre() + metodo.getNombre() + ".html");
                         // Si el archivo no existe es creado
                         if (!file.exists()) {
                             file.createNewFile();
@@ -115,35 +116,35 @@ public class Traductor {
                         String campos = "";
                         Vector<String> Campos = new Vector<>();
                         for (Atributo atributo : metodo.getClase().getAtributos().values()) {
-                            if(atributo.getNombre().equals("nombre") || atributo.getNombre().equals("identificacion")){
+                            if (atributo.getNombre().equals("nombre") || atributo.getNombre().equals("identificacion")) {
                                 Campos.add(0, atributo.getNombre());
                             } else {
                                 Campos.add(atributo.getNombre());
                             }
                         }
-                        
+
                         for (String atributo : Campos) {
-                            campos += campoDeTexto(atributo.replace("_", " "))+"\n";
+                            campos += campoDeTexto(atributo.replace("_", " ")) + "\n";
                         }
-                        documento = documento.replace("<--campos-->", campos);                       
-                        
-                        switch (metodo.getNombre()){
+                        documento = documento.replace("<--campos-->", campos);
+
+                        switch (metodo.getNombre()) {
                             case "modifica":
-                                documento = documento.replace("<--titulo-->", "MODIFICAR "+metodo.getClase().getNombre());
+                                documento = documento.replace("<--titulo-->", "MODIFICAR " + metodo.getClase().getNombre());
                                 documento = documento.replace("<--accion-->", "Modificar");
-                                 break;
+                                break;
                             case "registra":
-                                documento = documento.replace("<--titulo-->", "REGISTRAR "+metodo.getClase().getNombre());
+                                documento = documento.replace("<--titulo-->", "REGISTRAR " + metodo.getClase().getNombre());
                                 documento = documento.replace("<--accion-->", "Registrar");
                                 break;
                             default:
-                                documento = documento.replace("<--titulo-->", metodo.getNombre()+" "+metodo.getClase().getNombre());
+                                documento = documento.replace("<--titulo-->", metodo.getNombre() + " " + metodo.getClase().getNombre());
                                 documento = documento.replace("<--accion-->", metodo.getNombre());
                                 break;
                         }
-                        
+
                         //Crear el archivo
-                        File file = new File(d + "/"+rol.getNombre()+metodo.getNombre()+".html");
+                        File file = new File(d + "/" + rol.getNombre() + metodo.getNombre() + ".html");
                         // Si el archivo no existe es creado
                         if (!file.exists()) {
                             file.createNewFile();
@@ -171,11 +172,88 @@ public class Traductor {
             }
         }
     }
-    
+
+    //funcion para generar menus
+    public static void generarMenu() {
+        for (Rol rol : Rol.roles.values()) {
+            HashMap<String, Metodo> metodosValidos = new HashMap<String, Metodo>();
+            File archivo = null;
+            FileReader fr = null;
+            BufferedReader br = null;
+            String subMenus = "";
+            for (Clase clase : Clase.getClases().values()) {
+                for (Metodo metodo : clase.getMetodos().values()) {
+                    if (metodo.getRoles().containsKey(rol.getNombre())
+                            && !(metodo.getNombre().equals("registra")
+                            || metodo.getNombre().equals("modifica")
+                            || metodo.getNombre().equals("elimina")
+                            || metodo.getNombre().equals("busca"))) {
+                        metodosValidos.put(metodo.getNombre(), metodo);
+                    }
+                }
+                if(!metodosValidos.isEmpty()){
+                    subMenus += menuDropdown(clase.getNombre(), metodosValidos);
+                    metodosValidos.clear();
+                }
+            }
+            
+            try {
+                // Apertura del fichero y creacion de BufferedReader para poder
+                // hacer una lectura comoda (disponer del metodo readLine()).
+                archivo = new File("Plantillas/menu.txt");
+                fr = new FileReader(archivo);
+                br = new BufferedReader(fr);
+                // Lectura del fichero
+                String documento = "", linea;
+                while ((linea = br.readLine()) != null) {
+                    documento += "\n" + linea;
+                }
+                documento = documento.replace("<-- subMenus -->", subMenus);
+
+                //Crear el archivo
+                File file = new File(d + "/" + rol.getNombre() + ".html");
+                // Si el archivo no existe es creado
+                if (!file.exists()) {
+                    file.createNewFile();
+                }
+                FileWriter fw = new FileWriter(file);
+                BufferedWriter bw = new BufferedWriter(fw);
+                bw.write(documento);
+                bw.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                // En el finally cerramos el fichero, para asegurarnos
+                // que se cierra tanto si todo va bien como si salta 
+                // una excepcion.
+                try {
+                    if (null != fr) {
+                        fr.close();
+                    }
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
+            }
+        }
+    }
+
     public static String campoDeTexto(String nombre) {
         return "<div class=\"form-group\"><label for=\"subject\">" + nombre + "</label>"
                 + "<input class=\"form-control item\" type=\"text\" id=\"" + nombre + "\""
                 + "name=\"" + nombre + "\"></div>";
+    }
+
+    public static String menuDropdown(String nomClase, HashMap<String, Metodo> metodos) {
+        String menu = "<li class=\"nav-item dropdown\" role=\"presentation\">"
+                + "<a data-toggle=\"dropdown\" aria-expanded=\"false\" class="
+                + "\"nav-link dropdown-toggle\" href=\"#\">" + nomClase + "</a>\n"
+                + "<div class=\"dropdown-menu\" role=\"presentation\">\n";
+        for (Metodo metodo : metodos.values()) {
+            menu += "<a class=\"dropdown-item\" href=\"#\">" + metodo.getNombre() + "</a>\n";
+        }
+        menu += "</div>\n</li>";
+        return menu;
     }
 
     //Recuperado de https://prlazarus.tk/md_2014_06_10.html

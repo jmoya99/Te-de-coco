@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class Rol {
     
     private String nombre;
-    private HashMap<String,Metodo> metodos;
+    private HashMap<String, Metodo> metodos;
     public static HashMap<String, Rol> roles = new HashMap<>();
 
     public Rol(String nombre) {
