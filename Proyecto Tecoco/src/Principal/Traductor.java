@@ -172,6 +172,65 @@ public class Traductor {
             }
         }
     }
+    
+    public static void generarBEM(){
+        for (Rol rol : Rol.roles.values()) {
+            for (Metodo metodo : rol.getMetodos().values()) {
+                if (metodo.getNombre().equals("muestra")) {
+                    File archivo = null;
+                    FileReader fr = null;
+                    BufferedReader br = null;
+                    try {
+                        // Apertura del fichero y creacion de BufferedReader para poder
+                        // hacer una lectura comoda (disponer del metodo readLine()).
+                        archivo = new File("Plantillas/mostrar.txt");
+                        fr = new FileReader(archivo);
+                        br = new BufferedReader(fr);
+                        // Lectura del fichero
+                        String documento = "", linea;
+                        while ((linea = br.readLine()) != null) {
+                            documento += "\n" + linea;
+                        }
+                        
+                        documento = documento.replace("<-- Clase -->", metodo.getClase().getNombre());
+                        
+                        String columnas = "";
+                        for (Atributo atributo : metodo.getClase().getAtributos().values()){
+                            columnas += columnaTabla(atributo.getNombre());
+                            
+                            if (atributo.isIsPrimary()){
+                                documento = documento.replace("<-- Identificador -->", atributo.getNombre());
+                            }
+                        }
+                        
+                        documento = documento.replace("<-- Columnas -->", columnas);
+                        
+                        File file = new File(d + "/" + rol.getNombre() + metodo.getNombre() 
+                                + metodo.getClase().getNombre() + ".html");
+                        if (!file.exists()) {
+                            file.createNewFile();
+                        }
+                        FileWriter fw = new FileWriter(file);
+                        BufferedWriter bw = new BufferedWriter(fw);
+                        bw.write(documento);
+                        bw.close();
+                        
+                        
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            if (null != fr) {
+                                fr.close();
+                            }
+                        } catch (Exception e2) {
+                            e2.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     //funcion para generar menus
     public static void generarMenu() {
@@ -254,6 +313,11 @@ public class Traductor {
         }
         menu += "</div>\n</li>";
         return menu;
+    }
+    
+    public static String columnaTabla(String nombreColumna){
+        String columna = "<th>" + nombreColumna + "</th>";
+        return columna;
     }
 
     //Recuperado de https://prlazarus.tk/md_2014_06_10.html
