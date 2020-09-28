@@ -42,24 +42,25 @@
                     <p></p>
                     <div class="col-md-12 search-table-col">
                         <div id="buscar">
-                            <input type="text" placeholder="Ingrese el <-- Identificador -->">
+                            <input type="text" placeholder="Ingrese <-- Identificador -->">
                             <button class="btn btn-success" id="btnBuscar" style="margin-left: 5px;" type="submit"><p title="Buscar"><i class="fa fa-search" style="font-size: 15px;"></i></p></button>
-                            <button class="btn btn-success" id="btnRegistrar" style="margin-left: 5px;"
-                                type="submit"><i class="fa fa-plus" style="font-size: 15px;"></i>&nbsp;Registrar</button></div>
+                            <-- Registra --> </div>
                         <div class="table-responsive table-bordered table table-hover table-bordered results">
                             <table class="table table-bordered table-hover">
                                 <thead class="bill-header cs">
                                     <tr>
                                         <-- Columnas -->
-                                        <th>Gestionar</th>
+
+                                        <-- Gestionar -->
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-					<-- Filas -->
-                                        <td>Fila</td>
-                                        <td><button class="btn btn-success" style="margin-left: 5px;background: rgb(36,129,167);" type="submit"><p title="Modificar"><i class="fa fa-pencil" style="font-size: 15px;"></i></p></button>
-                                            <button class="btn btn-danger" style="margin-left: 5px;" type="submit"><p title="Eliminar"><i class="fa fa-trash" style="font-size: 15px;"></i></p></button></td>
+
+					<-- Fila -->
+						
+                                        <-- td -->  <-- Modifica -->
+                                            <-- Elimina --> <-- /td -->
                                     </tr>
                                 </tbody>
                             </table>

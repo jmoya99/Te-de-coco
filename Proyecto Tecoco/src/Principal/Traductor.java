@@ -137,10 +137,6 @@ public class Traductor {
                                 documento = documento.replace("<--titulo-->", "REGISTRAR " + metodo.getClase().getNombre());
                                 documento = documento.replace("<--accion-->", "Registrar");
                                 break;
-                            default:
-                                documento = documento.replace("<--titulo-->", metodo.getNombre() + " " + metodo.getClase().getNombre());
-                                documento = documento.replace("<--accion-->", metodo.getNombre());
-                                break;
                         }
 
                         //Crear el archivo
@@ -195,15 +191,61 @@ public class Traductor {
                         documento = documento.replace("<-- Clase -->", metodo.getClase().getNombre());
                         
                         String columnas = "";
-                        for (Atributo atributo : metodo.getClase().getAtributos().values()){
-                            columnas += columnaTabla(atributo.getNombre());
-                            
+                        Vector<String> Columnas = new Vector<>();
+                        for (Atributo atributo : metodo.getClase().getAtributos().values()) {
                             if (atributo.isIsPrimary()){
                                 documento = documento.replace("<-- Identificador -->", atributo.getNombre());
                             }
+                            if (atributo.getNombre().equals("nombre") || atributo.getNombre().equals("identificacion")) {
+                                Columnas.add(0, atributo.getNombre());
+                            } else {
+                                Columnas.add(atributo.getNombre());
+                            }
                         }
                         
+
+                        for (String atributo : Columnas){
+                            columnas += crearColumna(atributo);
+                        }
                         documento = documento.replace("<-- Columnas -->", columnas);
+                        String fila = "";
+                        for (int i = 0; i < Columnas.size(); i++) {
+                            fila += crearDatoColumna("atributo"+(i+1))+"\n";
+                        }
+                        documento = documento.replace("<-- Fila -->", fila);
+                        // <th>Gestionar</th>
+                        String botonRegistra = "";
+                        String botonModifica = "";
+                        String botonElimina = "";
+                        String td = "";
+                        String endTd = "";
+                        String gestionar = "";
+                        if(rol.getMetodos().containsKey("registra") && 
+                                rol.getMetodos().get("registra").getClase().getNombre()==metodo.getClase().getNombre()){
+                                botonRegistra = "<button class=\"btn btn-success\" id=\"btnRegistrar\" style=\"margin-left: 5px;\""
+                                        +"type=\"submit\"><p title=\"Registrar\"><i class=\"fa fa-plus\" style=\"font-size: 15px;\"></i>&nbsp;Registrar</p></button>";                                   
+                        }
+                        if(rol.getMetodos().containsKey("modifica") || rol.getMetodos().containsKey("elimina")){
+                            if(rol.getMetodos().containsKey("modifica") && 
+                                    rol.getMetodos().get("modifica").getClase().getNombre()==metodo.getClase().getNombre()){
+                                    botonModifica = "<button class=\"btn btn-success\" style=\"margin-left: 5px;background: rgb(36,129,167);\" type=\"submit\"><p "
+                                            + "title=\"Modificar\"><i class=\"fa fa-pencil\" style=\"font-size: 15px;\"></i></p></button>";
+                            }
+                            if(rol.getMetodos().containsKey("elimina") && 
+                                    rol.getMetodos().get("elimina").getClase().getNombre()==metodo.getClase().getNombre()){
+                                    botonElimina = "<button class=\"btn btn-danger\" style=\"margin-left: 5px;\" type=\"submit\"><p "
+                                            + "title=\"Eliminar\"><i class=\"fa fa-trash\" style=\"font-size: 15px;\"></i></p></button>";
+                            }
+                            td = "<td>";
+                            endTd = "</td>";
+                            gestionar = "<th> Gestionar </th>";
+                        }
+                        documento = documento.replace("<-- Registra -->", botonRegistra);
+                        documento = documento.replace("<-- Modifica -->", botonModifica);
+                        documento = documento.replace("<-- Elimina -->", botonElimina);
+                        documento = documento.replace("<-- td -->", td);
+                        documento = documento.replace("<-- /td -->", endTd);
+                        documento = documento.replace("<-- Gestionar -->", gestionar);
                         
                         File file = new File(d + "/" + rol.getNombre() + metodo.getNombre() 
                                 + metodo.getClase().getNombre() + ".html");
@@ -315,9 +357,13 @@ public class Traductor {
         return menu;
     }
     
-    public static String columnaTabla(String nombreColumna){
-        String columna = "<th>" + nombreColumna + "</th>";
+    public static String crearColumna(String nombreColumna){
+        String columna = "<th>" + nombreColumna.replace("_"," ") + "</th>";
         return columna;
+    }
+    public static String crearDatoColumna(String dato){
+        String Dato = "<td>" + dato + "</td>";
+        return Dato;
     }
 
     //Recuperado de https://prlazarus.tk/md_2014_06_10.html
