@@ -80,3 +80,21 @@
   justify-content: center;
 }
 
+#buscar {
+  text-align: right;
+  margin-bottom: 15px;
+}
+
+.btn:not(:disabled):not(.disabled) {
+}
+
+#btnBuscar {
+  background-color: rgb(245,163,39);
+  border-color: rgb(245,163,39);
+}
+
+#btnRegistrar {
+  background-color: #1e7e34;
+  border-color: #1e7e34;
+}
+
