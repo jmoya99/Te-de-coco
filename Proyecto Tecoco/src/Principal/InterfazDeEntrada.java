@@ -135,7 +135,7 @@ public class InterfazDeEntrada extends JFrame {
         try {
             String nom = JOptionPane.showInputDialog("Ingrese el nombre del proyecto");
             Traductor.nombreP = nom;
-            Traductor.nombreProyecto(nom);
+            Traductor.direccionProyecto();
             for (File csv : csvs) {
                 Main.interpretar(csv);
             }

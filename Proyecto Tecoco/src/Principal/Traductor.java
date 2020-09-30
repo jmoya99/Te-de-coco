@@ -33,8 +33,8 @@ public class Traductor {
     public static String d = "Resultado/";
     public static String nombreP = "";
 
-    public static void nombreProyecto(String nombre) {
-        d += nombre;
+    public static void direccionProyecto() {
+        d += nombreP;
     }
 
     public static void generarFormulariosGenericos() {
