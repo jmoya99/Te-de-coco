@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title><-- TituloProyecto --></title>
+    <title>Contact - Brand</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cookie">
@@ -18,19 +18,32 @@
     <link rel="stylesheet" href="assets/css/untitled.css">
 </head>
 
-<body>
-    <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient">
-        <div class="container"><a class="navbar-brand logo" href="#"> <-- TituloProyecto --> </a><button data-toggle="collapse" class="navbar-toggler" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse"
-                data-aos="fade-down-left" id="navbarNav">
-                <ul class="nav navbar-nav ml-auto">
-                    <-- subMenus -->
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="#">Cerrar sesión</a></li>
-                </ul>
+<body>    
+    <footer style="background-color: rgb(82,147,252);">
+        <div class="row">
+            <div class="col-sm-6 col-md-4 footer-navigation">
+                <h3><a>Proyecto<span style="color: rgb(12,35,72);"><--Titulo--></span></a></h3>
+                <p class="company-name">Derechos reservados © 2020</p>
+            </div>
+            <div class="col-sm-6 col-md-4 footer-contacts">
+                <div>
+                    <p class="footer-center-info email text-left">Camilo Loaiza</p>                </div>
+                <div>
+                    <p class="footer-center-info email text-left">Juan Moya</p>                </div>
+                <div>
+                    <p class="footer-center-info email text-left">Julian Ospina</p>
+                </div>
+                <div>
+                    <p class="footer-center-info email text-left">Juan Pe&ntilde;a</p>
+                </div>
+                <div>
+                    <p class="footer-center-info email text-left">Juan Usuga</p>
+                </div>
+                
+                    
             </div>
         </div>
-    </nav>
-
+    </footer>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>

@@ -37,6 +37,50 @@ public class Traductor {
         d += nombreP;
     }
 
+    public static void generarFooter() {
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+        try {
+            // Apertura del fichero y creacion de BufferedReader para poder
+            // hacer una lectura comoda (disponer del metodo readLine()).
+            archivo = new File("Plantillas/footer.txt");
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+            // Lectura del fichero
+            String documento = "", linea;
+            while ((linea = br.readLine()) != null) {
+                documento += "\n" + linea;
+            }
+            documento = documento.replace("<--Titulo-->", Traductor.nombreP);
+
+            //Crear el archivo
+            File file = new File(d + "/footer.html");
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(documento);
+            bw.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero, para asegurarnos
+            // que se cierra tanto si todo va bien como si salta 
+            // una excepcion.
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+
     public static void generarFormulariosGenericos() {
         for (Rol rol : Rol.roles.values()) {
             for (Metodo metodo : rol.getMetodos().values()) {
@@ -66,7 +110,7 @@ public class Traductor {
                         documento = documento.replace("<--titulo-->", metodo.getNombre() + " " + metodo.getClase().getNombre());
 
                         //Crear el archivo
-                        File file = new File(d + "/" + rol.getNombre() + metodo.getNombre() + ".html");
+                        File file = new File(d + "/" + rol.getNombre() + metodo.getNombre() + metodo.getClase().getNombre() + ".html");
                         // Si el archivo no existe es creado
                         if (!file.exists()) {
                             file.createNewFile();
@@ -117,20 +161,20 @@ public class Traductor {
                         String campos = "";
                         Vector<String> Campos = new Vector<>();
                         for (Atributo atributo : metodo.getClase().getAtributos().values()) {
-                            if (metodo.getNombre().equals("modifica") && !atributo.isIsPrimary()){
+                            if (metodo.getNombre().equals("modifica") && !atributo.isIsPrimary()) {
                                 if (atributo.getNombre().equals("nombre")) {
                                     Campos.add(0, atributo.getNombre());
                                 } else {
                                     Campos.add(atributo.getNombre());
                                 }
-                            } else if (metodo.getNombre().equals("registra")){
+                            } else if (metodo.getNombre().equals("registra")) {
                                 if (atributo.getNombre().equals("nombre") || atributo.getNombre().equals("identificacion")) {
                                     Campos.add(0, atributo.getNombre());
                                 } else {
                                     Campos.add(atributo.getNombre());
                                 }
                             }
-                            
+
                         }
 
                         for (String atributo : Campos) {
@@ -179,8 +223,8 @@ public class Traductor {
             }
         }
     }
-    
-    public static void generarBEM(){
+
+    public static void generarBEM() {
         for (Rol rol : Rol.roles.values()) {
             if (rol.getMetodos().containsKey("muestra")) {
                 Metodo muestra = rol.getMetodos().get("muestra");
@@ -204,7 +248,7 @@ public class Traductor {
                     String columnas = "";
                     Vector<String> Columnas = new Vector<>();
                     for (Atributo atributo : muestra.getClase().getAtributos().values()) {
-                        if (atributo.isIsPrimary()){
+                        if (atributo.isIsPrimary()) {
                             documento = documento.replace("<-- Identificador -->", atributo.getNombre());
                         }
                         if (atributo.getNombre().equals("nombre") || atributo.getNombre().equals("identificacion")) {
@@ -214,14 +258,13 @@ public class Traductor {
                         }
                     }
 
-
-                    for (String atributo : Columnas){
+                    for (String atributo : Columnas) {
                         columnas += crearColumna(atributo);
                     }
                     documento = documento.replace("<-- Columnas -->", columnas);
                     String fila = "";
                     for (int i = 0; i < Columnas.size(); i++) {
-                        fila += crearDatoColumna("atributo"+(i+1))+"\n";
+                        fila += crearDatoColumna("atributo" + (i + 1)) + "\n";
                     }
                     documento = documento.replace("<-- Fila -->", fila);
                     // <th>Gestionar</th>
@@ -231,21 +274,21 @@ public class Traductor {
                     String td = "";
                     String endTd = "";
                     String gestionar = "";
-                    if(rol.getMetodos().containsKey("registra") && 
-                            rol.getMetodos().get("registra").getClase().getNombre()==muestra.getClase().getNombre()){
-                            botonRegistra = "<button class=\"btn btn-success\" id=\"btnRegistrar\" style=\"margin-left: 5px;\""
-                                    +"type=\"submit\"><p title=\"Registrar\"><i class=\"fa fa-plus\" style=\"font-size: 15px;\"></i>&nbsp;Registrar</p></button>";                                   
+                    if (rol.getMetodos().containsKey("registra")
+                            && rol.getMetodos().get("registra").getClase().getNombre() == muestra.getClase().getNombre()) {
+                        botonRegistra = "<button class=\"btn btn-success\" id=\"btnRegistrar\" style=\"margin-left: 5px;\""
+                                + "type=\"submit\"><p title=\"Registrar\"><i class=\"fa fa-plus\" style=\"font-size: 15px;\"></i>&nbsp;Registrar</p></button>";
                     }
-                    if(rol.getMetodos().containsKey("modifica") || rol.getMetodos().containsKey("elimina")){
-                        if(rol.getMetodos().containsKey("modifica") && 
-                                rol.getMetodos().get("modifica").getClase().getNombre()==muestra.getClase().getNombre()){
-                                botonModifica = "<button class=\"btn btn-success\" style=\"margin-left: 5px;background: rgb(36,129,167);\" type=\"submit\"><p "
-                                        + "title=\"Modificar\"><i class=\"fa fa-pencil\" style=\"font-size: 15px;\"></i></p></button>";
+                    if (rol.getMetodos().containsKey("modifica") || rol.getMetodos().containsKey("elimina")) {
+                        if (rol.getMetodos().containsKey("modifica")
+                                && rol.getMetodos().get("modifica").getClase().getNombre() == muestra.getClase().getNombre()) {
+                            botonModifica = "<button class=\"btn btn-success\" style=\"margin-left: 5px;background: rgb(36,129,167);\" type=\"submit\"><p "
+                                    + "title=\"Modificar\"><i class=\"fa fa-pencil\" style=\"font-size: 15px;\"></i></p></button>";
                         }
-                        if(rol.getMetodos().containsKey("elimina") && 
-                                rol.getMetodos().get("elimina").getClase().getNombre()==muestra.getClase().getNombre()){
-                                botonElimina = "<button class=\"btn btn-danger\" style=\"margin-left: 5px;\" type=\"submit\"><p "
-                                        + "title=\"Eliminar\"><i class=\"fa fa-trash\" style=\"font-size: 15px;\"></i></p></button>";
+                        if (rol.getMetodos().containsKey("elimina")
+                                && rol.getMetodos().get("elimina").getClase().getNombre() == muestra.getClase().getNombre()) {
+                            botonElimina = "<button class=\"btn btn-danger\" style=\"margin-left: 5px;\" type=\"submit\"><p "
+                                    + "title=\"Eliminar\"><i class=\"fa fa-trash\" style=\"font-size: 15px;\"></i></p></button>";
                         }
                         td = "<td>";
                         endTd = "</td>";
@@ -258,7 +301,7 @@ public class Traductor {
                     documento = documento.replace("<-- /td -->", endTd);
                     documento = documento.replace("<-- Gestionar -->", gestionar);
 
-                    File file = new File(d + "/" + rol.getNombre() + muestra.getNombre() 
+                    File file = new File(d + "/" + rol.getNombre() + muestra.getNombre()
                             + muestra.getClase().getNombre() + ".html");
                     if (!file.exists()) {
                         file.createNewFile();
@@ -267,7 +310,6 @@ public class Traductor {
                     BufferedWriter bw = new BufferedWriter(fw);
                     bw.write(documento);
                     bw.close();
-
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -302,12 +344,12 @@ public class Traductor {
                         metodosValidos.put(metodo.getNombre(), metodo);
                     }
                 }
-                if(!metodosValidos.isEmpty()){
+                if (!metodosValidos.isEmpty()) {
                     subMenus += menuDropdown(rol.getNombre(), clase.getNombre(), metodosValidos);
                     metodosValidos.clear();
                 }
             }
-            
+
             try {
                 // Apertura del fichero y creacion de BufferedReader para poder
                 // hacer una lectura comoda (disponer del metodo readLine()).
@@ -319,7 +361,7 @@ public class Traductor {
                 while ((linea = br.readLine()) != null) {
                     documento += "\n" + linea;
                 }
-                documento = documento.replace("<-- TituloProyecto -->", nombreP);
+                documento = documento.replaceAll("<-- TituloProyecto -->", nombreP);
                 documento = documento.replace("<-- subMenus -->", subMenus);
 
                 //Crear el archivo
@@ -359,23 +401,24 @@ public class Traductor {
     public static String menuDropdown(String nomRol, String nomClase, HashMap<String, Metodo> metodos) {
         String menu = "<li class=\"nav-item dropdown\" role=\"presentation\">"
                 + "<a data-toggle=\"dropdown\" aria-expanded=\"false\" class="
-                + "\"nav-link dropdown-toggle\" href=\"#\">" 
-                + nomClase.replace("_"," ") + "</a>\n<div class=\""
+                + "\"nav-link dropdown-toggle\" href=\"#\">"
+                + nomClase.replace("_", " ") + "</a>\n<div class=\""
                 + "dropdown-menu\" role=\"presentation\">\n";
         for (Metodo metodo : metodos.values()) {
-            menu += "<a class=\"dropdown-item\" href=\"" + nomRol + 
-                    metodo.getNombre() + nomClase + ".html\">" + 
-                    metodo.getNombre().replace("_", " ") + "</a>\n";
+            menu += "<a class=\"dropdown-item\" href=\"" + nomRol
+                    + metodo.getNombre() + nomClase + ".html\">"
+                    + metodo.getNombre().replace("_", " ") + "</a>\n";
         }
         menu += "</div>\n</li>";
         return menu;
     }
-    
-    public static String crearColumna(String nombreColumna){
-        String columna = "<th>" + nombreColumna.replace("_"," ") + "</th>";
+
+    public static String crearColumna(String nombreColumna) {
+        String columna = "<th>" + nombreColumna.replace("_", " ") + "</th>";
         return columna;
     }
-    public static String crearDatoColumna(String dato){
+
+    public static String crearDatoColumna(String dato) {
         String Dato = "<td>" + dato + "</td>";
         return Dato;
     }

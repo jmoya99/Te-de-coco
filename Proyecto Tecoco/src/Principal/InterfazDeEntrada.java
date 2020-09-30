@@ -140,6 +140,7 @@ public class InterfazDeEntrada extends JFrame {
                 Main.interpretar(csv);
             }
             Traductor.copiarDirectorio(Traductor.o, Traductor.d);
+            Traductor.generarFooter();
             Traductor.generarFormulariosGenericos();
             Traductor.generarRM();
             Traductor.generarBEM();
