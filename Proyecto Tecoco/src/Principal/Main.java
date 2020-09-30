@@ -7,6 +7,7 @@ package Principal;
 
 import UpperEssential.UpperEssentialLookAndFeel;
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -22,7 +23,6 @@ public class Main {
         InterfazDeEntrada frame = new InterfazDeEntrada();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        //interpretar();
     }
 
     public static Metodo buscarMetodo(Elemento elemento, HashMap<Integer, Elemento> csv){

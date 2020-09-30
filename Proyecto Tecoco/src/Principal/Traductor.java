@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -32,6 +33,8 @@ public class Traductor {
     public static final String o = "Plantillas/Plantilla HTML";
     public static String d = "Resultado/";
     public static String nombreP = "";
+    public static String footerHtml;
+    public static HashMap<String, String> menuHtml = new HashMap<>();
 
     public static void direccionProyecto() {
         d += nombreP;
@@ -53,17 +56,7 @@ public class Traductor {
                 documento += "\n" + linea;
             }
             documento = documento.replace("<--Titulo-->", Traductor.nombreP);
-
-            //Crear el archivo
-            File file = new File(d + "/footer.html");
-            // Si el archivo no existe es creado
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            FileWriter fw = new FileWriter(file);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(documento);
-            bw.close();
+            Traductor.footerHtml = documento;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,7 +101,8 @@ public class Traductor {
                         documento = documento.replace("<--campos-->", campos);
                         documento = documento.replace("<--accion-->", metodo.getNombre());
                         documento = documento.replace("<--titulo-->", metodo.getNombre() + " " + metodo.getClase().getNombre());
-
+                        documento = documento.replace("<--footer-->", Traductor.footerHtml);
+                        documento = documento.replace("<--menu-->", Traductor.menuHtml.get(rol.getNombre()));
                         //Crear el archivo
                         File file = new File(d + "/" + rol.getNombre() + metodo.getNombre() + metodo.getClase().getNombre() + ".html");
                         // Si el archivo no existe es creado
@@ -192,6 +186,8 @@ public class Traductor {
                                 documento = documento.replace("<--accion-->", "Registrar");
                                 break;
                         }
+                        documento = documento.replace("<--footer-->", Traductor.footerHtml);
+                        documento = documento.replace("<--menu-->", Traductor.menuHtml.get(rol.getNombre()));
 
                         //Crear el archivo
                         File file = new File(d + "/" + rol.getNombre() + metodo.getNombre()
@@ -276,13 +272,13 @@ public class Traductor {
                     String gestionar = "";
                     if (rol.getMetodos().containsKey("registra")
                             && rol.getMetodos().get("registra").getClase().getNombre() == muestra.getClase().getNombre()) {
-                        botonRegistra = "<button class=\"btn btn-success\" id=\"btnRegistrar\" style=\"margin-left: 5px;\""
+                        botonRegistra = "<button onclick=\"window.location.href='"+rol.getNombre()+"registra"+muestra.getClase().getNombre()+".html'\" class=\"btn btn-success\" id=\"btnRegistrar\" style=\"margin-left: 5px;\""
                                 + "type=\"submit\"><p title=\"Registrar\"><i class=\"fa fa-plus\" style=\"font-size: 15px;\"></i>&nbsp;Registrar</p></button>";
                     }
                     if (rol.getMetodos().containsKey("modifica") || rol.getMetodos().containsKey("elimina")) {
                         if (rol.getMetodos().containsKey("modifica")
                                 && rol.getMetodos().get("modifica").getClase().getNombre() == muestra.getClase().getNombre()) {
-                            botonModifica = "<button class=\"btn btn-success\" style=\"margin-left: 5px;background: rgb(36,129,167);\" type=\"submit\"><p "
+                            botonModifica = "<button onclick=\"window.location.href='"+rol.getNombre()+"modifica"+muestra.getClase().getNombre()+".html'\" class=\"btn btn-success\" style=\"margin-left: 5px;background: rgb(36,129,167);\" type=\"submit\"><p "
                                     + "title=\"Modificar\"><i class=\"fa fa-pencil\" style=\"font-size: 15px;\"></i></p></button>";
                         }
                         if (rol.getMetodos().containsKey("elimina")
@@ -300,6 +296,8 @@ public class Traductor {
                     documento = documento.replace("<-- td -->", td);
                     documento = documento.replace("<-- /td -->", endTd);
                     documento = documento.replace("<-- Gestionar -->", gestionar);
+                    documento = documento.replace("<--footer-->", Traductor.footerHtml);
+                    documento = documento.replace("<--menu-->", Traductor.menuHtml.get(rol.getNombre()));
 
                     File file = new File(d + "/" + rol.getNombre() + muestra.getNombre()
                             + muestra.getClase().getNombre() + ".html");
@@ -363,17 +361,7 @@ public class Traductor {
                 }
                 documento = documento.replaceAll("<-- TituloProyecto -->", nombreP);
                 documento = documento.replace("<-- subMenus -->", subMenus);
-
-                //Crear el archivo
-                File file = new File(d + "/" + rol.getNombre() + ".html");
-                // Si el archivo no existe es creado
-                if (!file.exists()) {
-                    file.createNewFile();
-                }
-                FileWriter fw = new FileWriter(file);
-                BufferedWriter bw = new BufferedWriter(fw);
-                bw.write(documento);
-                bw.close();
+                Traductor.menuHtml.put(rol.getNombre(), documento);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -393,7 +381,8 @@ public class Traductor {
     }
 
     public static String campoDeTexto(String nombre) {
-        return "<div class=\"form-group\"><label for=\"subject\">" + nombre + "</label>"
+        return "<div class=\"form-group\"><label for=\"subject\">" + Arrays.toString(
+                nombre.split("_")).replace(", ", " ").replaceAll("[\\[\\]]", "") + "</label>"
                 + "<input class=\"form-control item\" type=\"text\" id=\"" + nombre + "\""
                 + "name=\"" + nombre + "\"></div>";
     }

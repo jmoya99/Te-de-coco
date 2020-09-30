@@ -141,10 +141,10 @@ public class InterfazDeEntrada extends JFrame {
             }
             Traductor.copiarDirectorio(Traductor.o, Traductor.d);
             Traductor.generarFooter();
+            Traductor.generarMenu();
             Traductor.generarFormulariosGenericos();
             Traductor.generarRM();
             Traductor.generarBEM();
-            Traductor.generarMenu();
             File fichero = new File("Resultado");
             JOptionPane.showMessageDialog(null, "Su proyecto fue creado en "+fichero.getAbsolutePath());
         } catch (Exception ex) {
