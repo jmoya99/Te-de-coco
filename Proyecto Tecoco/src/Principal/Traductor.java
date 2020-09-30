@@ -31,6 +31,7 @@ public class Traductor {
 
     public static final String o = "Plantillas/Plantilla HTML";
     public static String d = "Resultado/";
+    public static String nombreP = "";
 
     public static void nombreProyecto(String nombre) {
         d += nombre;
@@ -192,7 +193,7 @@ public class Traductor {
                     }
                 }
                 if(!metodosValidos.isEmpty()){
-                    subMenus += menuDropdown(clase.getNombre(), metodosValidos);
+                    subMenus += menuDropdown(rol.getNombre(), clase.getNombre(), metodosValidos);
                     metodosValidos.clear();
                 }
             }
@@ -208,6 +209,7 @@ public class Traductor {
                 while ((linea = br.readLine()) != null) {
                     documento += "\n" + linea;
                 }
+                documento = documento.replace("<-- TituloProyecto -->", nombreP);
                 documento = documento.replace("<-- subMenus -->", subMenus);
 
                 //Crear el archivo
@@ -244,13 +246,16 @@ public class Traductor {
                 + "name=\"" + nombre + "\"></div>";
     }
 
-    public static String menuDropdown(String nomClase, HashMap<String, Metodo> metodos) {
+    public static String menuDropdown(String nomRol, String nomClase, HashMap<String, Metodo> metodos) {
         String menu = "<li class=\"nav-item dropdown\" role=\"presentation\">"
                 + "<a data-toggle=\"dropdown\" aria-expanded=\"false\" class="
-                + "\"nav-link dropdown-toggle\" href=\"#\">" + nomClase + "</a>\n"
-                + "<div class=\"dropdown-menu\" role=\"presentation\">\n";
+                + "\"nav-link dropdown-toggle\" href=\"#\">" 
+                + nomClase.replace("_"," ") + "</a>\n<div class=\""
+                + "dropdown-menu\" role=\"presentation\">\n";
         for (Metodo metodo : metodos.values()) {
-            menu += "<a class=\"dropdown-item\" href=\"#\">" + metodo.getNombre() + "</a>\n";
+            menu += "<a class=\"dropdown-item\" href=\"" + nomRol + 
+                    metodo.getNombre() + nomClase + ".html\">" + 
+                    metodo.getNombre().replace("_", " ") + "</a>\n";
         }
         menu += "</div>\n</li>";
         return menu;

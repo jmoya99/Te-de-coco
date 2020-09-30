@@ -20,11 +20,12 @@
 
 <body>
     <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient">
-        <div class="container"><a class="navbar-brand logo" href="#">Proyecto Tecoco</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+        <div class="container"><a class="navbar-brand logo" href="#"> <-- TituloProyecto --> </a><button data-toggle="collapse" class="navbar-toggler" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse"
                 data-aos="fade-down-left" id="navbarNav">
                 <ul class="nav navbar-nav ml-auto">
                     <-- subMenus -->
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="#">Cerrar sesión</a></li>
                 </ul>
             </div>
         </div>
