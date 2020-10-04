@@ -178,7 +178,11 @@ public class Traductor {
                         }
 
                         for (String atributo : Campos) {
-                            campos += campoDeTexto(atributo.replace("_", " ")) + "\n";
+                            if (metodo.getNombre().equals("modifica")) {
+                                campos += campoDeTextoM(atributo.replace("_", " ")) + "\n";
+                            } else {
+                                campos += campoDeTexto(atributo.replace("_", " ")) + "\n";
+                            }                                                        
                         }
                         documento = documento.replace("<--campos-->", campos);
 
@@ -246,29 +250,24 @@ public class Traductor {
                         }
 
                         documento = documento.replace("<-- Clase -->", muestra.getClase().getNombre());
-
-                        String columnas = "";
-                        Vector<String> Columnas = new Vector<>();
+                        
                         for (Atributo atributo : muestra.getClase().getAtributos().values()) {
                             if (atributo.isIsPrimary()) {
                                 documento = documento.replace("<-- Identificador -->", atributo.getNombre());
-                            }
-                            if (atributo.getNombre().equals("nombre") || atributo.getNombre().equals("identificacion")) {
-                                Columnas.add(0, atributo.getNombre());
-                            } else {
-                                Columnas.add(atributo.getNombre());
-                            }
+                            }                          
                         }
+
+                        String columnas = "";
+                        String fila = "";
+                        Vector<String> Columnas = ordenarAtributos(muestra.getClase().getAtributos());                        
 
                         for (String atributo : Columnas) {
                             columnas += crearColumna(atributo);
+                            fila += crearDatoColumna(atributo) + "\n";
                         }
                         documento = documento.replace("<-- Columnas -->", columnas);
-                        String fila = "";
-                        for (int i = 0; i < Columnas.size(); i++) {
-                            fila += crearDatoColumna("atributo" + (i + 1)) + "\n";
-                        }
                         documento = documento.replace("<-- Fila -->", fila);
+                        
                         // <th>Gestionar</th>
                         String botonRegistra = "";
                         String botonModifica = "";
@@ -278,19 +277,25 @@ public class Traductor {
                         String gestionar = "";
                         if (clase.getMetodos().containsKey("registra")
                                 && clase.getMetodos().get("registra").getRoles().containsKey(rol.getNombre())) {
-                            botonRegistra = "<button class=\"btn btn-success\" id=\"btnRegistrar\" style=\"margin-left: 5px;\""
-                                    + "type=\"submit\"><p title=\"Registrar\"><i class=\"fa fa-plus\" style=\"font-size: 15px;\"></i>&nbsp;Registrar</p></button>";
+                            botonRegistra = "<a href=\"{{% url 'registra' %}}\"><button class=\"btn btn-success\" id=\"btnRegistrar\" style=\"margin-left: 5px;\""
+                                    + "type=\"submit\"><p title=\"Registrar\"><i class=\"fa fa-plus\" style=\"font-size: 15px;\"></i>&nbsp;Registrar</p></button></a>";
                         }
                         if (clase.getMetodos().containsKey("modifica") || clase.getMetodos().containsKey("elimina")) {
+                            String primary = null;
+                            for (Atributo Att: clase.getAtributos().values()) {
+                                if(Att.isIsPrimary()){
+                                    primary = Att.getNombre();
+                                }
+                            }
                             if (clase.getMetodos().containsKey("modifica")
                                     && clase.getMetodos().get("modifica").getRoles().containsKey(rol.getNombre())) {
-                                botonModifica = "<button class=\"btn btn-success\" style=\"margin-left: 5px;background: rgb(36,129,167);\" type=\"submit\"><p "
-                                        + "title=\"Modificar\"><i class=\"fa fa-pencil\" style=\"font-size: 15px;\"></i></p></button>";
+                                botonModifica = "<a href=\"{{% url 'modifica' id = p." + primary + " %}}\"><button class=\"btn btn-success\" style=\"margin-left: 5px;background: rgb(36,129,167);\" type=\"submit\"><p "
+                                        + "title=\"Modificar\"><i class=\"fa fa-pencil\" style=\"font-size: 15px;\"></i></p></button></a>";
                             }
                             if (clase.getMetodos().containsKey("elimina")
                                     && clase.getMetodos().get("elimina").getRoles().containsKey(rol.getNombre())) {
-                                botonElimina = "<button class=\"btn btn-danger\" style=\"margin-left: 5px;\" type=\"submit\"><p "
-                                        + "title=\"Eliminar\"><i class=\"fa fa-trash\" style=\"font-size: 15px;\"></i></p></button>";
+                                botonElimina = "<a href=\"{{% url 'elimina' id = p." + primary + " %}}\"><button class=\"btn btn-danger\" style=\"margin-left: 5px;\" type=\"submit\"><p "
+                                        + "title=\"Eliminar\"><i class=\"fa fa-trash\" style=\"font-size: 15px;\"></i></p></button></a>";
                             }
                             td = "<td>";
                             endTd = "</td>";
@@ -400,6 +405,12 @@ public class Traductor {
                 + "<input class=\"form-control item\" type=\"text\" id=\"" + nombre + "\""
                 + "name=\"" + nombre + "\"></div>";
     }
+    
+    public static String campoDeTextoM(String nombre) {
+        return "<div class=\"form-group\"><label for=\"subject\">" + nombre + "</label>"
+                + "<input class=\"form-control item\" type=\"text\" id=\"" + nombre + "\""
+                + "name=\"" + nombre + "\" value=\"{{pe." + nombre + "}}\"></div>";
+    }
 
     public static String menuDropdown(String nomRol, String nomClase, HashMap<String, Metodo> metodos) {
         String menu = "<li class=\"nav-item dropdown\" role=\"presentation\">"
@@ -422,8 +433,21 @@ public class Traductor {
     }
 
     public static String crearDatoColumna(String dato) {
-        String Dato = "<td>" + dato + "</td>";
+        String Dato = "<td>{{p." + dato + "}}</td>";
         return Dato;
+    }
+    
+    public static Vector<String> ordenarAtributos(HashMap<String, Atributo> atributos) {
+        Vector<String> Columnas = new Vector<>();
+        for (Atributo atributo : atributos.values()) {            
+            if (atributo.getNombre().equals("nombre") || atributo.getNombre().equals("identificacion")) {
+                Columnas.add(0, atributo.getNombre());
+            } else {
+                Columnas.add(atributo.getNombre());
+            }
+        }
+        
+        return Columnas;
     }
 
     //Recuperado de https://prlazarus.tk/md_2014_06_10.html
