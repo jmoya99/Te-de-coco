@@ -1,19 +1,38 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Principal;
 
 import java.lang.ProcessBuilder;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 
-public class Main {
-
-    private static String OS = System.getProperty("os.name").toLowerCase();
-    public static String nombreP;
-
+/**
+ *
+ * @author cj4
+ * Aportes de codigo de:
+ * https://mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/
+ * https://mkyong.com/java/how-to-execute-shell-command-from-java/
+ */
+public class TraductorComandos {
+    
+    public static String d = "Resultado/";
+    public static String nombreP = "";
+    public static int nScript = 0;
+    public static String OS = System.getProperty("os.name").toLowerCase();
+    
     public static boolean isWindows() {
 
         return (OS.indexOf("win") >= 0);
@@ -64,64 +83,8 @@ public class Main {
 
     }
 
-    public static void startProject() {
-        File archivo = null;
-        FileReader fr = null;
-        BufferedReader br = null;
-        String extension = "";
-        int tamano;
-        try {
-
-            if (isWindows()) {
-                archivo = new File("windows.txt");
-                extension = ".bat";
-                tamano = 11;
-            } else if (isUnix()) {
-                archivo = new File("linux.txt");
-                extension = ".sh";
-                tamano = 9;
-            } else {
-                archivo = new File("a.txt");
-                extension = ".txt";
-                tamano = 5;
-            }
-
-            fr = new FileReader(archivo);
-            br = new BufferedReader(fr);
-            // Lectura del fichero
-            String documento = "", linea;
-            while ((linea = br.readLine()) != null) {
-                documento += "\n" + linea;
-            }
-
-            documento = documento.replace("<-- ruta -->",
-                    archivo.getAbsolutePath().substring(0,
-                            archivo.getAbsolutePath().length() - tamano));
-            documento = documento.replace("<-- comandos -->",
-                    "django-admin startproject " + nombreP);
-            //Crear el archivo
-            File file = new File("a" + extension);
-            // Si el archivo no existe es creado
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            FileWriter fw = new FileWriter(file);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(documento);
-            bw.close();
-            if (isWindows()) {
-                execCommand(file.getAbsolutePath());
-            } else if (isUnix()) {
-                execCommand("chmod +x a" + extension);
-                execCommand("./a" + extension);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     
-    public static void execOCommand(String comandos) {
+    public static void execCommands(String comandos, String parteRuta) {
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
@@ -130,17 +93,17 @@ public class Main {
         try {
 
             if (isWindows()) {
-                archivo = new File("windows.txt");
+                archivo = new File("Scripts/windows.txt");
                 extension = ".bat";
-                tamano = 11;
+                tamano = 19;
             } else if (isUnix()) {
-                archivo = new File("linux.txt");
+                archivo = new File("Scripts/linux.txt");
                 extension = ".sh";
-                tamano = 9;
+                tamano = 17;
             } else {
-                archivo = new File("a.txt");
+                archivo = new File("Scripts/" + nScript + ".txt");
                 extension = ".txt";
-                tamano = 5;
+                tamano = 13;
             }
 
             fr = new FileReader(archivo);
@@ -154,10 +117,10 @@ public class Main {
             documento = documento.replace("<-- ruta -->",
                     archivo.getAbsolutePath().substring(0,
                             archivo.getAbsolutePath().length() - tamano)
-                    + nombreP);
+                    + parteRuta);
             documento = documento.replace("<-- comandos -->", comandos);
             //Crear el archivo
-            File file = new File("a" + extension);
+            File file = new File(d + nScript + extension);
             // Si el archivo no existe es creado
             if (!file.exists()) {
                 file.createNewFile();
@@ -169,8 +132,8 @@ public class Main {
             if (isWindows()) {
                 execCommand(file.getAbsolutePath());
             } else if (isUnix()) {
-                execCommand("chmod +x a" + extension);
-                execCommand("./a" + extension);
+                execCommand("chmod a+x ./" + d + nScript + extension);
+                execCommand("./" + d + nScript + extension);
             }
 
         } catch (Exception e) {
@@ -178,19 +141,17 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(OS);
-        nombreP = "PROYECTO"; //NO se pueden utilizar caracteres especiales
-        startProject();
+    public static void generarScripts() {
+        execCommands("django-admin startproject " + nombreP, d);
+        nScript++;
         if (isWindows()) {
-            execOCommand("python manage.py makemigrations\n"
+            execCommands("python manage.py makemigrations\n"
                     + "python manage.py migrate\n"
-                    + "django-admin startapp application");
+                    + "django-admin startapp application", d + nombreP);
         } else if (isUnix()) {
-            execOCommand("python3 manage.py makemigrations\n"
+            execCommands("python3 manage.py makemigrations\n"
                     + "python3 manage.py migrate\n"
-                    + "django-admin startapp application");
+                    + "django-admin startapp application", d + nombreP);
         }
     }
-
 }
