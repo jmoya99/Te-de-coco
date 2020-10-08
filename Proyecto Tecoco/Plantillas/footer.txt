@@ -1,0 +1,36 @@
+{% load staticfiles %}     
+    <footer style="background-color: rgb(82,147,252);">
+        <div class="row">
+            <div class="col-sm-6 col-md-4 footer-navigation">
+                <h3><a>Proyecto<span style="color: rgb(12,35,72);"><--Titulo--></span></a></h3>
+                <p class="company-name">Derechos reservados © 2020</p>
+            </div>
+            <div class="col-sm-6 col-md-4 footer-contacts">
+                <div>
+                    <p class="footer-center-info email text-left">Camilo Loaiza</p>                </div>
+                <div>
+                    <p class="footer-center-info email text-left">Juan Moya</p>                </div>
+                <div>
+                    <p class="footer-center-info email text-left">Julian Ospina</p>
+                </div>
+                <div>
+                    <p class="footer-center-info email text-left">Juan Pe&ntilde;a</p>
+                </div>
+                <div>
+                    <p class="footer-center-info email text-left">Juan Usuga</p>
+                </div>
+                
+                    
+            </div>
+        </div>
+    </footer>
+    <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'assets/js/bs-init.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.2.0/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js"></script>
+    <script src="{% static 'assets/js/Table-With-Search.js' %}"></script>
+    <script src="{% static 'assets/js/theme.js' %}"></script>
+</body>
+
+</html>
