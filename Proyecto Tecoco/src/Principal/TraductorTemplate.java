@@ -277,7 +277,7 @@ public class TraductorTemplate {
                         String gestionar = "";
                         if (clase.getMetodos().containsKey("registra")
                                 && clase.getMetodos().get("registra").getRoles().containsKey(rol.getNombre())) {
-                            botonRegistra = "<a href=\"{{% url 'registra' %}}\"><button class=\"btn btn-success\" id=\"btnRegistrar\" style=\"margin-left: 5px;\""
+                            botonRegistra = "<a href=\"{{% url '" + rol.getNombre() + "registra" + clase.getNombre() + "' %}}\"><button class=\"btn btn-success\" id=\"btnRegistrar\" style=\"margin-left: 5px;\""
                                     + "type=\"submit\"><p title=\"Registrar\"><i class=\"fa fa-plus\" style=\"font-size: 15px;\"></i>&nbsp;Registrar</p></button></a>";
                         }
                         if (clase.getMetodos().containsKey("modifica") || clase.getMetodos().containsKey("elimina")) {
@@ -289,12 +289,12 @@ public class TraductorTemplate {
                             }
                             if (clase.getMetodos().containsKey("modifica")
                                     && clase.getMetodos().get("modifica").getRoles().containsKey(rol.getNombre())) {
-                                botonModifica = "<a href=\"{{% url 'modifica' id = p." + primary + " %}}\"><button class=\"btn btn-success\" style=\"margin-left: 5px;background: rgb(36,129,167);\" type=\"submit\"><p "
+                                botonModifica = "<a href=\"{{% url '" + rol.getNombre() + "modifica" + clase.getNombre() + "' id = p." + primary + " %}}\"><button class=\"btn btn-success\" style=\"margin-left: 5px;background: rgb(36,129,167);\" type=\"submit\"><p "
                                         + "title=\"Modificar\"><i class=\"fa fa-pencil\" style=\"font-size: 15px;\"></i></p></button></a>";
                             }
                             if (clase.getMetodos().containsKey("elimina")
                                     && clase.getMetodos().get("elimina").getRoles().containsKey(rol.getNombre())) {
-                                botonElimina = "<a href=\"{{% url 'elimina' id = p." + primary + " %}}\"><button class=\"btn btn-danger\" style=\"margin-left: 5px;\" type=\"submit\"><p "
+                                botonElimina = "<a href=\"{{% url '" + rol.getNombre() + "elimina" + clase.getNombre() + "' id = p." + primary + " %}}\"><button class=\"btn btn-danger\" style=\"margin-left: 5px;\" type=\"submit\"><p "
                                         + "title=\"Eliminar\"><i class=\"fa fa-trash\" style=\"font-size: 15px;\"></i></p></button></a>";
                             }
                             td = "<td>";
