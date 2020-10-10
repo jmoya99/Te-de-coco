@@ -9,15 +9,10 @@ import java.lang.ProcessBuilder;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
+
 
 /**
  *
@@ -28,7 +23,7 @@ import java.io.OutputStream;
  */
 public class TraductorComandos {
     
-    public static String d = "Resultado/";
+    public static String d = "Resultado";
     public static String nombreP = "";
     public static int nScript = 0;
     public static String OS = System.getProperty("os.name").toLowerCase();
@@ -93,7 +88,7 @@ public class TraductorComandos {
         try {
 
             if (isWindows()) {
-                archivo = new File("Scripts/windows.txt");
+                archivo = new File("Script\\windows.txt");
                 extension = ".bat";
                 tamano = 19;
             } else if (isUnix()) {
@@ -142,13 +137,17 @@ public class TraductorComandos {
     }
 
     public static void generarScripts() {
-        execCommands("django-admin startproject " + nombreP, d);
-        nScript++;
         if (isWindows()) {
+            d = d + "\\";
+            execCommands("django-admin startproject " + nombreP, d);
+            nScript++;
             execCommands("python manage.py makemigrations\n"
                     + "python manage.py migrate\n"
                     + "django-admin startapp application", d + nombreP);
         } else if (isUnix()) {
+            d = d + "/";
+            execCommands("django-admin startproject " + nombreP, d);
+            nScript++;
             execCommands("python3 manage.py makemigrations\n"
                     + "python3 manage.py migrate\n"
                     + "django-admin startapp application", d + nombreP);
