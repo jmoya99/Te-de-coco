@@ -1,3 +1,2 @@
-cd \
-cd <-- ruta -->
+cd "<-- ruta -->"
 <-- comandos -->
