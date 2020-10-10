@@ -27,7 +27,7 @@ import java.util.Vector;
  * http://chuwiki.chuidiang.org/index.php?title=Lectura_y_Escritura_de_Ficheros_en_Java
  * https://decodigo.com/java-crear-archivos-de-texto
  */
-public class Traductor {
+public class TraductorTemplate {
 
     public static final String o = "Plantillas/Plantilla HTML";
     public static String d = "Resultado/";
@@ -52,7 +52,7 @@ public class Traductor {
             while ((linea = br.readLine()) != null) {
                 documento += "\n" + linea;
             }
-            documento = documento.replace("<--Titulo-->", Traductor.nombreP);
+            documento = documento.replace("<--Titulo-->", TraductorTemplate.nombreP);
 
             //Crear el archivo
             File file = new File(d + "/footer.html");
@@ -182,7 +182,7 @@ public class Traductor {
                                 campos += campoDeTextoM(atributo.replace("_", " ")) + "\n";
                             } else {
                                 campos += campoDeTexto(atributo.replace("_", " ")) + "\n";
-                            }                                                        
+                            }
                         }
                         documento = documento.replace("<--campos-->", campos);
 
@@ -231,8 +231,8 @@ public class Traductor {
     public static void generarBEM() {
         for (Rol rol : Rol.roles.values()) {
             for (Clase clase : Clase.getClases().values()) {
-                if (clase.getMetodos().containsKey("muestra") 
-                        && clase.getMetodos().get("muestra").getRoles().containsKey(rol.getNombre())){
+                if (clase.getMetodos().containsKey("muestra")
+                        && clase.getMetodos().get("muestra").getRoles().containsKey(rol.getNombre())) {
                     Metodo muestra = clase.getMetodos().get("muestra");
                     File archivo = null;
                     FileReader fr = null;
@@ -250,16 +250,16 @@ public class Traductor {
                         }
 
                         documento = documento.replace("<-- Clase -->", muestra.getClase().getNombre());
-                        
+
                         for (Atributo atributo : muestra.getClase().getAtributos().values()) {
                             if (atributo.isIsPrimary()) {
                                 documento = documento.replace("<-- Identificador -->", atributo.getNombre());
-                            }                          
+                            }
                         }
 
                         String columnas = "";
                         String fila = "";
-                        Vector<String> Columnas = ordenarAtributos(muestra.getClase().getAtributos());                        
+                        Vector<String> Columnas = ordenarAtributos(muestra.getClase().getAtributos());
 
                         for (String atributo : Columnas) {
                             columnas += crearColumna(atributo);
@@ -267,7 +267,7 @@ public class Traductor {
                         }
                         documento = documento.replace("<-- Columnas -->", columnas);
                         documento = documento.replace("<-- Fila -->", fila);
-                        
+
                         // <th>Gestionar</th>
                         String botonRegistra = "";
                         String botonModifica = "";
@@ -277,24 +277,24 @@ public class Traductor {
                         String gestionar = "";
                         if (clase.getMetodos().containsKey("registra")
                                 && clase.getMetodos().get("registra").getRoles().containsKey(rol.getNombre())) {
-                            botonRegistra = "<a href=\"{{% url 'registra' %}}\"><button class=\"btn btn-success\" id=\"btnRegistrar\" style=\"margin-left: 5px;\""
+                            botonRegistra = "<a href=\"{{% url '" + rol.getNombre() + "registra" + clase.getNombre() + "' %}}\"><button class=\"btn btn-success\" id=\"btnRegistrar\" style=\"margin-left: 5px;\""
                                     + "type=\"submit\"><p title=\"Registrar\"><i class=\"fa fa-plus\" style=\"font-size: 15px;\"></i>&nbsp;Registrar</p></button></a>";
                         }
                         if (clase.getMetodos().containsKey("modifica") || clase.getMetodos().containsKey("elimina")) {
                             String primary = null;
-                            for (Atributo Att: clase.getAtributos().values()) {
-                                if(Att.isIsPrimary()){
+                            for (Atributo Att : clase.getAtributos().values()) {
+                                if (Att.isIsPrimary()) {
                                     primary = Att.getNombre();
                                 }
                             }
                             if (clase.getMetodos().containsKey("modifica")
                                     && clase.getMetodos().get("modifica").getRoles().containsKey(rol.getNombre())) {
-                                botonModifica = "<a href=\"{{% url 'modifica' id = p." + primary + " %}}\"><button class=\"btn btn-success\" style=\"margin-left: 5px;background: rgb(36,129,167);\" type=\"submit\"><p "
+                                botonModifica = "<a href=\"{{% url '" + rol.getNombre() + "modifica" + clase.getNombre() + "' id = p." + primary + " %}}\"><button class=\"btn btn-success\" style=\"margin-left: 5px;background: rgb(36,129,167);\" type=\"submit\"><p "
                                         + "title=\"Modificar\"><i class=\"fa fa-pencil\" style=\"font-size: 15px;\"></i></p></button></a>";
                             }
                             if (clase.getMetodos().containsKey("elimina")
                                     && clase.getMetodos().get("elimina").getRoles().containsKey(rol.getNombre())) {
-                                botonElimina = "<a href=\"{{% url 'elimina' id = p." + primary + " %}}\"><button class=\"btn btn-danger\" style=\"margin-left: 5px;\" type=\"submit\"><p "
+                                botonElimina = "<a href=\"{{% url '" + rol.getNombre() + "elimina" + clase.getNombre() + "' id = p." + primary + " %}}\"><button class=\"btn btn-danger\" style=\"margin-left: 5px;\" type=\"submit\"><p "
                                         + "title=\"Eliminar\"><i class=\"fa fa-trash\" style=\"font-size: 15px;\"></i></p></button></a>";
                             }
                             td = "<td>";
@@ -405,7 +405,7 @@ public class Traductor {
                 + "<input class=\"form-control item\" type=\"text\" id=\"" + nombre + "\""
                 + "name=\"" + nombre + "\"></div>";
     }
-    
+
     public static String campoDeTextoM(String nombre) {
         return "<div class=\"form-group\"><label for=\"subject\">" + nombre + "</label>"
                 + "<input class=\"form-control item\" type=\"text\" id=\"" + nombre + "\""
@@ -436,17 +436,17 @@ public class Traductor {
         String Dato = "<td>{{p." + dato + "}}</td>";
         return Dato;
     }
-    
+
     public static Vector<String> ordenarAtributos(HashMap<String, Atributo> atributos) {
         Vector<String> Columnas = new Vector<>();
-        for (Atributo atributo : atributos.values()) {            
+        for (Atributo atributo : atributos.values()) {
             if (atributo.getNombre().equals("nombre") || atributo.getNombre().equals("identificacion")) {
                 Columnas.add(0, atributo.getNombre());
             } else {
                 Columnas.add(atributo.getNombre());
             }
         }
-        
+
         return Columnas;
     }
 

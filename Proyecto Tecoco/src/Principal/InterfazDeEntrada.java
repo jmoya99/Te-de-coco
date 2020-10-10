@@ -134,17 +134,19 @@ public class InterfazDeEntrada extends JFrame {
         btnCrear.setEnabled(false);
         try {
             String nom = JOptionPane.showInputDialog("Ingrese el nombre del proyecto");
-            Traductor.nombreP = nom;
-            Traductor.direccionProyecto();
+            TraductorTemplate.nombreP = nom;
+            TraductorTemplate.direccionProyecto();
             for (File csv : csvs) {
                 Main.interpretar(csv);
             }
-            Traductor.copiarDirectorio(Traductor.o, Traductor.d);
-            Traductor.generarFooter();
-            Traductor.generarFormulariosGenericos();
-            Traductor.generarRM();
-            Traductor.generarBEM();
-            Traductor.generarMenu();
+            TraductorComandos.nombreP = nom + "D";
+            TraductorComandos.generarScripts();
+            TraductorTemplate.copiarDirectorio(TraductorTemplate.o, TraductorTemplate.d);
+            TraductorTemplate.generarFooter();
+            TraductorTemplate.generarFormulariosGenericos();
+            TraductorTemplate.generarRM();
+            TraductorTemplate.generarBEM();
+            TraductorTemplate.generarMenu();
             File fichero = new File("Resultado");
             JOptionPane.showMessageDialog(null, "Su proyecto fue creado en "+fichero.getAbsolutePath());
         } catch (Exception ex) {
