@@ -140,7 +140,6 @@ public class InterfazDeEntrada extends JFrame {
                 Main.interpretar(csv);
             }
             TraductorComandos.nombreP = nom + "D";
-            TraductorDjango.nombreP = nom + "D";
             TraductorComandos.generarScripts();
             TraductorTemplate.copiarDirectorio(TraductorTemplate.o, TraductorTemplate.d);
             TraductorTemplate.generarFooter();
@@ -148,6 +147,8 @@ public class InterfazDeEntrada extends JFrame {
             TraductorTemplate.generarRM();
             TraductorTemplate.generarBEM();
             TraductorTemplate.generarMenu();
+            TraductorDjango.generarModelo();
+            TraductorDjango.modificarSettings();
             TraductorDjango.generarView();
             File fichero = new File("Resultado");
             JOptionPane.showMessageDialog(null, "Su proyecto fue creado en "+fichero.getAbsolutePath());
