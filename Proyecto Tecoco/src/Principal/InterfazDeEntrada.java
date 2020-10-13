@@ -147,6 +147,8 @@ public class InterfazDeEntrada extends JFrame {
             TraductorTemplate.generarRM();
             TraductorTemplate.generarBEM();
             TraductorTemplate.generarMenu();
+            TraductorDjango.generarModelo();
+            TraductorDjango.modificarSettings();
             File fichero = new File("Resultado");
             JOptionPane.showMessageDialog(null, "Su proyecto fue creado en "+fichero.getAbsolutePath());
         } catch (Exception ex) {
