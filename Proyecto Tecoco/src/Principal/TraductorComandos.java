@@ -88,7 +88,7 @@ public class TraductorComandos {
         try {
 
             if (isWindows()) {
-                archivo = new File("Script\\windows.txt");
+                archivo = new File("Scripts\\windows.txt");
                 extension = ".bat";
                 tamano = 19;
             } else if (isUnix()) {
@@ -110,9 +110,7 @@ public class TraductorComandos {
             }
 
             documento = documento.replace("<-- ruta -->",
-                    archivo.getAbsolutePath().substring(0,
-                            archivo.getAbsolutePath().length() - tamano)
-                    + parteRuta);
+                    parteRuta);
             documento = documento.replace("<-- comandos -->", comandos);
             //Crear el archivo
             File file = new File(d + nScript + extension);
