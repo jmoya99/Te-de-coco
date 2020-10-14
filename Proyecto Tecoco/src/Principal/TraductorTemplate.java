@@ -32,9 +32,11 @@ public class TraductorTemplate {
     public static final String o = "Plantillas/Plantilla HTML";
     public static String d = "Resultado/";
     public static String nombreP = "";
+    public static String rutaStatic = "Resultado/";
 
     public static void direccionProyecto() {
         d += nombreP + "/templates/";
+        rutaStatic += nombreP + "/static/";
     }
 
     public static void generarFooter() {
