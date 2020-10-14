@@ -34,7 +34,7 @@ public class TraductorTemplate {
     public static String nombreP = "";
 
     public static void direccionProyecto() {
-        d += nombreP;
+        d += nombreP + "/"+ nombreP + "/templates/";
     }
 
     public static void generarFooter() {
