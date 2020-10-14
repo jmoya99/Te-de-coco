@@ -17,6 +17,8 @@ import java.io.FileWriter;
  * @author juanpma
  */
 public class TraductorDjango {
+    
+    public static String d = "Resultado/"+TraductorTemplate.nombreP;
 
     public static void generarModelo() {
         String codigoModelo = "from django.db import models\n\n"
@@ -43,7 +45,7 @@ public class TraductorDjango {
         BufferedReader br = null;
         try {
             //Crear el archivo
-            File file = new File(d + "D/application/models.py");
+            File file = new File(TraductorDjango.d + "/application/models.py");
             file.delete();
             if (!file.exists()) {
                 file.createNewFile();
@@ -76,7 +78,7 @@ public class TraductorDjango {
         try {
             // Apertura del fichero y creacion de BufferedReader para poder
             // hacer una lectura comoda (disponer del metodo readLine()).
-            archivo = new File(d + "D/" + TraductorTemplate.nombreP + "D/settings.py");
+            archivo = new File(TraductorDjango.d + "/" + TraductorTemplate.nombreP + "/settings.py");
             fr = new FileReader(archivo);
             br = new BufferedReader(fr);
             // Lectura del fichero
@@ -91,7 +93,7 @@ public class TraductorDjango {
             documento = documento.replace("en-us", "es-co");
             br.close();
             //Crear el archivo
-            File file = new File(d + "D/" + TraductorTemplate.nombreP + "D/settings.py");
+            File file = new File(TraductorDjango.d + "/" + TraductorTemplate.nombreP + "/settings.py");
             file.delete();
             if (!file.exists()) {
                 file.createNewFile();
@@ -142,7 +144,7 @@ public class TraductorDjango {
                 }
             }
             //Crear el archivo
-            File file = new File(d + "D/" + TraductorTemplate.nombreP + "D/urls.py");
+            File file = new File(TraductorDjango.d + "/" + TraductorTemplate.nombreP + "/urls.py");
             file.delete();
             if (!file.exists()) {
                 file.createNewFile();

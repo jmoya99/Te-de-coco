@@ -34,7 +34,7 @@ public class TraductorTemplate {
     public static String nombreP = "";
 
     public static void direccionProyecto() {
-        d += nombreP + "/"+ nombreP + "/templates/";
+        d += nombreP + "/templates/";
     }
 
     public static void generarFooter() {
@@ -55,7 +55,7 @@ public class TraductorTemplate {
             documento = documento.replace("<--Titulo-->", TraductorTemplate.nombreP);
 
             //Crear el archivo
-            File file = new File(d + "/footer.html");
+            File file = new File(TraductorTemplate.d + "/footer.html");
             // Si el archivo no existe es creado
             if (!file.exists()) {
                 file.createNewFile();
@@ -110,7 +110,7 @@ public class TraductorTemplate {
                         documento = documento.replace("<--titulo-->", metodo.getNombre() + " " + metodo.getClase().getNombre());
 
                         //Crear el archivo
-                        File file = new File(d + "/" + rol.getNombre() + metodo.getNombre() + metodo.getClase().getNombre() + ".html");
+                        File file = new File(TraductorTemplate.d + "/" + rol.getNombre() + metodo.getNombre() + metodo.getClase().getNombre() + ".html");
                         // Si el archivo no existe es creado
                         if (!file.exists()) {
                             file.createNewFile();
@@ -198,7 +198,7 @@ public class TraductorTemplate {
                         }
 
                         //Crear el archivo
-                        File file = new File(d + "/" + rol.getNombre() + metodo.getNombre()
+                        File file = new File(TraductorTemplate.d + "/" + rol.getNombre() + metodo.getNombre()
                                 + metodo.getClase().getNombre() + ".html");
                         // Si el archivo no existe es creado
                         if (!file.exists()) {
@@ -308,7 +308,7 @@ public class TraductorTemplate {
                         documento = documento.replace("<-- /td -->", endTd);
                         documento = documento.replace("<-- Gestionar -->", gestionar);
 
-                        File file = new File(d + "/" + rol.getNombre() + muestra.getNombre()
+                        File file = new File(TraductorTemplate.d + "/" + rol.getNombre() + muestra.getNombre()
                                 + muestra.getClase().getNombre() + ".html");
                         if (!file.exists()) {
                             file.createNewFile();
@@ -373,7 +373,7 @@ public class TraductorTemplate {
                 documento = documento.replace("<-- subMenus -->", subMenus);
 
                 //Crear el archivo
-                File file = new File(d + "/" + rol.getNombre() + ".html");
+                File file = new File(TraductorTemplate.d + "/" + rol.getNombre() + ".html");
                 // Si el archivo no existe es creado
                 if (!file.exists()) {
                     file.createNewFile();
