@@ -87,8 +87,12 @@ public class TraductorDjango {
                 documento += "\n" + linea;
             }
             documento += "\nSTATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]";
-            int ini = documento.indexOf("INSTALLED_APPS");
-            int fin = documento.indexOf("]", ini);
+            int ini, fin;
+            ini = documento.indexOf("from");
+            fin = documento.indexOf("Path", ini);
+            documento = documento.replace(documento.substring(ini, fin + 4), documento.substring(ini, fin + 4) + "\nimport os\n");
+            ini = documento.indexOf("INSTALLED_APPS");
+            fin = documento.indexOf("]", ini);
             documento = documento.replace(documento.substring(ini, fin), documento.substring(ini, fin) + "\t'application',\n");
             documento = documento.replace("en-us", "es-co");
             br.close();
