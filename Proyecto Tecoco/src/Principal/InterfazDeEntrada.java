@@ -139,7 +139,7 @@ public class InterfazDeEntrada extends JFrame {
             for (File csv : csvs) {
                 Main.interpretar(csv);
             }
-            TraductorComandos.nombreP = nom + "D";
+            TraductorComandos.nombreP = nom;
             TraductorComandos.generarScripts();
             TraductorTemplate.copiarDirectorio(TraductorTemplate.o, TraductorTemplate.d);
             TraductorTemplate.generarFooter();
