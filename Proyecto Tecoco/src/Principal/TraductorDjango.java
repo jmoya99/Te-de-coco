@@ -168,6 +168,58 @@ public class TraductorDjango {
                     
                 }
             }
+
+              // vistas de elimina
+             if (clase.getMetodos().containsKey("elimina")){
+                for (Rol rol : clase.getMetodos().get("elimina").getRoles().values()) {
+                    codigoView += "def " + rol.getNombre() + "elimina" + clase.getNombre() + 
+                                "(request, id):\n" +
+                            "\tif request.session['rol'] is None:\n" +
+                            "\t\tmessages.warning(request,'Por favor inicie sesion')\n" +
+                            "\t\treturn redirect('index')\n" +
+                            "\telif request.session['rol'] != \"" + rol.getNombre() + "\":\n" +
+                            "\t\tmessages.warning(request,'Inicie sesion como " + 
+                                rol.getNombre() + "')\n" +
+                            "\t\treturn redirect('index')\n" +                          
+                            "\tpe = " + clase.getNombre() + ".objects.get(id = id)\n" +               
+                            "\ttry:\n" + 
+                            "\t\tpe.delete()\n" +
+                            "\t\tmessages.success(request,'" + clase.getNombre() + " eliminado')\n" +
+                            "\texcept:\n" + 
+                            "\t\tmessages.warning(request,'Error al Eliminar')\n" + 
+                            "\treturn redirect('" + rol.getNombre() + "muestra" + 
+                                clase.getNombre() + "')\n\n";
+                }
+            }
+             
+             // vistas de muestra
+             if (clase.getMetodos().containsKey("muestra")){
+                for (Rol rol : clase.getMetodos().get("muestra").getRoles().values()) {
+                    // obtengo el identificaro único
+                    String identificador = null;
+                    for (Atributo atributo : clase.getAtributos().values()) {
+                        if (atributo.isIsPrimary()) {
+                            identificador = atributo.getNombre();
+                        }                     
+                    }
+                    codigoView += "def " + rol.getNombre() + "muestra" + clase.getNombre() + 
+                                "(request):\n" +
+                            "\tif request.session['rol'] is None:\n" +
+                            "\t\tmessages.warning(request,'Por favor inicie sesion')\n" +
+                            "\t\treturn redirect('index')\n" +
+                            "\telif request.session['rol'] != \"" + rol.getNombre() + "\":\n" +
+                            "\t\tmessages.warning(request,'Inicie sesion como " + 
+                                rol.getNombre() + "')\n" +
+                            "\t\treturn redirect('index')\n" +
+                            "\tif request.method == 'POST' and request.POST['" + identificador + "']:\n" +                            
+                            "\t\tpa = " + clase.getNombre() + ".objects.filter(id = request.POST['" + identificador + "'])\n" +               
+                            "\telse:\n" +
+                            "\t\tpa = " + clase.getNombre() + ".objects.all()\n" +
+                            "\tcontext = { 'pa': pa }\n" +
+                            "\treturn redirect('" + rol.getNombre() + "muestra" + 
+                                clase.getNombre() + "')\n\n";
+                }
+            }
         }
         
         /*
