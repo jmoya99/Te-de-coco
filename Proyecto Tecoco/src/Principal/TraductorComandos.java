@@ -13,21 +13,19 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 
-
 /**
  *
- * @author cj4
- * Aportes de codigo de:
+ * @author cj4 Aportes de codigo de:
  * https://mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/
  * https://mkyong.com/java/how-to-execute-shell-command-from-java/
  */
 public class TraductorComandos {
-    
+
     public static String d = "Resultado";
     public static String nombreP = "";
     public static int nScript = 0;
     public static String OS = System.getProperty("os.name").toLowerCase();
-    
+
     public static boolean isWindows() {
 
         return (OS.indexOf("win") >= 0);
@@ -78,7 +76,6 @@ public class TraductorComandos {
 
     }
 
-    
     public static void execCommands(String comandos, String parteRuta) {
         File archivo = null;
         FileReader fr = null;
@@ -142,6 +139,7 @@ public class TraductorComandos {
             execCommands("python manage.py makemigrations\n"
                     + "python manage.py migrate\n"
                     + "django-admin startapp application", d + nombreP);
+            nScript++;
         } else if (isUnix()) {
             d = d + "/";
             execCommands("django-admin startproject " + nombreP, d);
@@ -149,6 +147,20 @@ public class TraductorComandos {
             execCommands("python3 manage.py makemigrations\n"
                     + "python3 manage.py migrate\n"
                     + "django-admin startapp application", d + nombreP);
+            nScript++;
+        }
+    }
+
+    public static void generarScriptsC() {
+        System.out.println(d);
+        if (isWindows()) {
+            execCommands("python manage.py makemigrations\n"
+                    + "python manage.py migrate\n", d + nombreP);
+            nScript++;
+        } else if (isUnix()) {
+            execCommands("python3 manage.py makemigrations\n"
+                    + "python3 manage.py migrate\n", d + nombreP);
+            nScript++;
         }
     }
 }
