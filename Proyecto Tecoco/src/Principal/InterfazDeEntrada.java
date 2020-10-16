@@ -143,11 +143,12 @@ public class InterfazDeEntrada extends JFrame {
             TraductorComandos.generarScripts();
             TraductorTemplate.copiarDirectorio(TraductorTemplate.o, TraductorTemplate.rutaStatic);
             TraductorTemplate.comprobarCrearDirectorio(TraductorTemplate.d);
+            TraductorTemplate.generarPlantillasUsuario();
             TraductorTemplate.generarFooter();
             TraductorTemplate.generarFormulariosGenericos();
             TraductorTemplate.generarRM();
             TraductorTemplate.generarBEM();
-            TraductorTemplate.generarMenu();
+            TraductorTemplate.generarMenus();
             TraductorDjango.generarModelo();
             TraductorDjango.modificarSettings();
             TraductorDjango.generarView();

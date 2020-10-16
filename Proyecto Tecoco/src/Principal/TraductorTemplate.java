@@ -340,7 +340,7 @@ public class TraductorTemplate {
     }
 
     //funcion para generar menus
-    public static void generarMenu() {
+    public static void generarMenus() {
         for (Rol rol : Rol.roles.values()) {
             HashMap<String, Metodo> metodosValidos = new HashMap<String, Metodo>();
             File archivo = null;
@@ -403,6 +403,104 @@ public class TraductorTemplate {
                 }
             }
         }
+    }
+
+    public static void generarPlantillasUsuario() {
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+        String documento = "", linea;
+        File file = null;
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+
+        try {
+            // Apertura del fichero y creacion de BufferedReader para poder
+            // hacer una lectura comoda (disponer del metodo readLine()).
+            //muestra usuario
+            archivo = new File("Plantillas/muestrausuario.txt");
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+            // Lectura del fichero
+
+            while ((linea = br.readLine()) != null) {
+                documento += "\n" + linea;
+            }
+            file = new File(TraductorTemplate.d + "/muestrausuario.html");
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            fw = new FileWriter(file);
+            bw = new BufferedWriter(fw);
+            bw.write(documento);
+            bw.close();
+
+            //registra usuario
+            archivo = new File("Plantillas/registrausuario.txt");
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+            // Lectura del fichero
+            documento = "";
+            while ((linea = br.readLine()) != null) {
+                documento += "\n" + linea;
+            }
+
+            String roles = "";
+
+            for (Rol rol : Rol.roles.values()) {
+                roles += opcionRol(rol.getNombre());
+            }
+            documento = documento.replace("<-- roles -->", roles);
+            file = new File(TraductorTemplate.d + "/registrausuario.html");
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            fw = new FileWriter(file);
+            bw = new BufferedWriter(fw);
+            bw.write(documento);
+            bw.close();
+
+            //modifica usuario
+            archivo = new File("Plantillas/modificausuario.txt");
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+            // Lectura del fichero
+            documento = "";
+            while ((linea = br.readLine()) != null) {
+                documento += "\n" + linea;
+            }
+            documento = documento.replace("<-- roles -->", roles);
+            file = new File(TraductorTemplate.d + "/modificausuario.html");
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            fw = new FileWriter(file);
+            bw = new BufferedWriter(fw);
+            bw.write(documento);
+            bw.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero, para asegurarnos
+            // que se cierra tanto si todo va bien como si salta 
+            // una excepcion.
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+
+    public static String opcionRol(String rol) {
+        return "<option value=\"" + rol + "\">" + rol.replace("_", " ")
+                + "</option>";
     }
 
     public static String campoDeTexto(String nombre) {

@@ -152,7 +152,6 @@ public class TraductorComandos {
     }
 
     public static void generarScriptsC() {
-        System.out.println(d);
         if (isWindows()) {
             execCommands("python manage.py makemigrations\n"
                     + "python manage.py migrate\n", d + nombreP);
