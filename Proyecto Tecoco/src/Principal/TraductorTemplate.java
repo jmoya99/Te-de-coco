@@ -39,6 +39,51 @@ public class TraductorTemplate {
         rutaStatic += nombreP + "/static/";
     }
 
+    public static void generarHeader() {
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+        try {
+            // Apertura del fichero y creacion de BufferedReader para poder
+            // hacer una lectura comoda (disponer del metodo readLine()).
+            archivo = new File("Plantillas/header.txt");
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+            // Lectura del fichero
+            String documento = "", linea;
+            while ((linea = br.readLine()) != null) {
+                documento += "\n" + linea;
+            }
+            documento = documento.replace("<-- TituloProyecto -->", nombreP);
+
+            //Crear el archivo
+            File file = new File(TraductorTemplate.d + "/header.html");
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(documento);
+            bw.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero, para asegurarnos
+            // que se cierra tanto si todo va bien como si salta 
+            // una excepcion.
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+    
+    
     public static void generarFooter() {
         File archivo = null;
         FileReader fr = null;

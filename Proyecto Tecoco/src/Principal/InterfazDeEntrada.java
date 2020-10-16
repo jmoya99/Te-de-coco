@@ -143,8 +143,9 @@ public class InterfazDeEntrada extends JFrame {
             TraductorComandos.generarScripts();
             TraductorTemplate.copiarDirectorio(TraductorTemplate.o, TraductorTemplate.rutaStatic);
             TraductorTemplate.comprobarCrearDirectorio(TraductorTemplate.d);
-            TraductorTemplate.generarPlantillasUsuario();
+            TraductorTemplate.generarHeader();
             TraductorTemplate.generarFooter();
+            TraductorTemplate.generarPlantillasUsuario();
             TraductorTemplate.generarFormulariosGenericos();
             TraductorTemplate.generarRM();
             TraductorTemplate.generarBEM();
