@@ -218,12 +218,58 @@ public class TraductorDjango {
                                 clase.getNombre() + "')\n\n";
                 }
             }
+             // vistas para modifica
+             if (clase.getMetodos().containsKey("modifica")){
+                for (Rol rol : clase.getMetodos().get("modifica").getRoles().values()) {
+                    codigoView += "def " + rol.getNombre() + "modifica" + clase.getNombre() + 
+                                "(request):\n" +
+                            "\tif request.session['rol'] is None:\n" +
+                            "\t\tmessages.warning(request,'Por favor inicie sesion')\n" +
+                            "\t\treturn redirect('index')\n" +
+                            "\telif request.session['rol'] != \"" + rol.getNombre() + "\":\n" +
+                            "\t\tmessages.warning(request,'Inicie sesion como " + 
+                                rol.getNombre() + "')\n" +
+                            "\t\treturn redirect('index')\n" +
+                            "\tif request.method == 'GET':\n" + 
+                            "\t\tcontext = {'" + rol.getNombre() + "':pe}\n" + 
+                            "\t\treturn render(request,'" + rol.getNombre() + "modifica" + 
+                                clase.getNombre() + ".html',context)\n" +
+                            "\telse:\n";
+                    for (Atributo atributo : clase.getAtributos().values()) {
+                        if(!atributo.isIsPrimary()){
+                            codigoView += "\t\tpe." + atributo.getNombre() + " = " +
+                                    "request.POST['" + atributo.getNombre() + "']\n";
+                        }
+                    }
+                    codigoView += "\t\ttry:\n" + 
+                            "\t\t\tpe.save()\n" +
+                            "\t\t\tmessages.success(request,'" + clase.getNombre() + " modificado')\n" +
+                            "\t\texcept:\n" + 
+                            "\t\t\tmessages.warning(request,'Error al modificar')\n" + 
+                            "\treturn redirect('" + rol.getNombre() + "muestra" + 
+                                clase.getNombre() + "')\n";
+                     
+                }
+             }
         }
         
         /*
         Código para login.
         */
-        
+        codigoView += "def login(request):\n" +
+                "\tif request.method == \"POST\":\n"+
+                "\t\tuser = request.POST['usuario']\n"+
+                "\t\tpas = request.POST['contrasena']\n"+
+                "\t\ttry:\n" + "\t\t\tusuario = usuario.objects.get(username = user, password = pas)\n";
+        for (Rol rol : Rol.getRoles().values()) {
+            
+            codigoView += "\t\t\tif usuario.rol == \""+rol.getNombre()+"\":\n"+
+                          "\t\t\t\trequest.session['rol'] = \""+rol.getNombre()+"\"\n"+
+                          "\t\t\t\treturn redirect('menu"+rol.getNombre()+"')\n";
+        }
+        codigoView += "\t\texcept:\n"+
+                     "\t\t\tmessages.warning(request,'Usuario o contraseña incorrectos')\n"+
+                    "\treturn render(request, \"index.html\",{})\n";
         //Logout
         codigoView += "def logout(request):\n" +
                 "\trequest.session['rol'] = None\n" +
