@@ -172,7 +172,28 @@ public class TraductorDjango {
                 + "\treturn redirect('mostrarusuario')\n\n";
         
         for (Clase clase : Clase.getClases().values()) {
-            // vistas de registra
+            // Vistas de formularios genéricos
+            for (Metodo metodo : clase.getMetodos().values()) {
+                if (!(metodo.getNombre().equals("registra") || metodo.getNombre().equals("muestra")
+                        || metodo.getNombre().equals("modifica") || metodo.getNombre().equals("elimina")
+                        || metodo.getNombre().equals("busca"))) {
+                    for (Rol rol : metodo.getRoles().values()) {
+                        codigoView += "def " + rol.getNombre() + metodo.getNombre() 
+                                + clase.getNombre() + "(request):\n" 
+                                + "\tif request.session['rol'] is None:\n" 
+                                + "\t\tmessages.warning(request,'Por favor inicie sesion')\n" 
+                                + "\t\treturn redirect('index')\n" 
+                                + "\telif request.session['rol'] != '" + rol.getNombre() + "':\n" 
+                                + "\t\tmessages.warning(request,'Inicie sesion como " + rol.getNombre() + "')\n" 
+                                + "\t\treturn redirect('index')\n" 
+                                + "\tif request.method == 'POST':\n" 
+                                + "\t\treturn redirect('')\n" // Acá se debe poner una ruta genérica para el Rol.
+                                + "\treturn render(request,'" + rol.getNombre() + metodo.getNombre() 
+                                + clase.getNombre() + ".html',{})\n\n";
+                    }
+                }
+            }
+            // Vistas de registra
             if (clase.getMetodos().containsKey("registra")) {
                 for (Rol rol : clase.getMetodos().get("registra").getRoles().values()) {
                     codigoView += "def " + rol.getNombre() + "registra" + clase.getNombre()
@@ -203,6 +224,7 @@ public class TraductorDjango {
                             + clase.getNombre() + ".html',{})\n\n";
                 }
             }
+            // Vistas de elimina
             if (clase.getMetodos().containsKey("elimina")) {
                 for (Rol rol : clase.getMetodos().get("elimina").getRoles().values()) {
                     codigoView += "def " + rol.getNombre() + "elimina" + clase.getNombre()
@@ -224,7 +246,7 @@ public class TraductorDjango {
                             + clase.getNombre() + "')\n\n";
                 }
             }
-            // vistas de muestra
+            // Vistas de muestra
             if (clase.getMetodos().containsKey("muestra")) {
                 for (Rol rol : clase.getMetodos().get("muestra").getRoles().values()) {
                     // obtengo el identificaro único
@@ -253,7 +275,7 @@ public class TraductorDjango {
                 }
             }
             
-            // vistas de modifica
+            // Vistas de modifica
             if (clase.getMetodos().containsKey("modifica")) {
                 for (Rol rol : clase.getMetodos().get("modifica").getRoles().values()) {
                     codigoView += "def " + rol.getNombre() + "modifica" + clase.getNombre()
@@ -284,7 +306,7 @@ public class TraductorDjango {
                             + "\t\texcept:\n"
                             + "\t\t\tmessages.warning(request,'Error al modificar')\n"
                             + "\treturn redirect('" + rol.getNombre() + "muestra"
-                            + clase.getNombre() + "')\n";
+                            + clase.getNombre() + "')\n\n";
                 }
             }
         }
