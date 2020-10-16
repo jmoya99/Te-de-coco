@@ -214,8 +214,8 @@ public class TraductorDjango {
                             "\telse:\n" +
                             "\t\tpa = " + clase.getNombre() + ".objects.all()\n" +
                             "\tcontext = { 'pa': pa }\n" +
-                            "\treturn redirect('" + rol.getNombre() + "muestra" + 
-                                clase.getNombre() + "')\n\n";
+                            "\treturn render(request, '" + rol.getNombre() + "muestra" + 
+                                clase.getNombre() + ".html', context)\n\n";
                 }
             }
         }
