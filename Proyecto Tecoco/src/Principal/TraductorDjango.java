@@ -1,4 +1,4 @@
-    /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -16,8 +16,8 @@ import java.io.FileWriter;
  * @author juanpma
  */
 public class TraductorDjango {
-    
-    public static String d = "Resultado/"+TraductorTemplate.nombreP;
+
+    public static String d = "Resultado/" + TraductorTemplate.nombreP;
 
     public static void generarModelo() {
         String codigoModelo = "from django.db import models\n\n"
@@ -121,161 +121,195 @@ public class TraductorDjango {
     }
 
     public static void generarView() {
-        String codigoView = "from django.shortcuts import render, redirect\n" +
-                        "from .models import *\n" +
-                        "from django.contrib import messages\n" +
-                        "from django.contrib.auth import authenticate\n" +
-                        "from django.contrib.auth.forms import AuthenticationForm\n" +
-                        "from django.contrib.auth import login as do_login\n" +
-                        "from django.contrib.auth import logout as do_logout\n\n";
+        String codigoView = "from django.shortcuts import render, redirect\n"
+                + "from .models import *\n"
+                + "from django.contrib import messages\n"
+                + "from django.contrib.auth import authenticate\n"
+                + "from django.contrib.auth.forms import AuthenticationForm\n"
+                + "from django.contrib.auth import login as do_login\n"
+                + "from django.contrib.auth import logout as do_logout\n\n"
+                + "def registrausuario(request):\n" // No tiene control de rol.
+                + "\tif request.method == 'POST':\n"
+                + "\t\tpe = usuario()\n"
+                + "\t\tpe.username = request.POST['username']\n"
+                + "\t\tpe.password = request.POST['password']\n"
+                + "\t\tpe.rol = request.POST['rol']\n"
+                + "\t\ttry:\n"
+                + "\t\t\tpe.save()\n"
+                + "\t\t\tmessages.success(request, 'usuario registrado')\n"
+                + "\t\texcept:\n"
+                + "\t\t\tmessages.warning(request, 'Error al registrar')\n"
+                + "\t\treturn redirect('muestrausuario')\n"
+                + "\treturn render(request, 'registrausuario.html', {})\n\n"
+                + "def muestrausuario(request):\n" // No tiene control de rol.
+                + "\tif request.method == 'POST' and request.POST['username']:\n" 
+                + "\t\tpa = usuario.objects.filter(id = request.POST['username'])\n"
+                + "\telse:\n"
+                + "\t\tpa = usuario.objects.all()\n"
+                + "\tcontext = { 'pa': pa }\n"
+                + "\treturn render(request, 'muestrausuario.html', context)\n\n"
+                + "def modificiarusuario(request, id):\n" // No tiene control de rol.
+                + "\tpe = usuario.objects.get(id = username)\n" 
+                + "\tif request.method == 'GET':\n" 
+                + "\t\tcontext = {'usuario': pe}\n" 
+                + "\t\treturn render(request, 'modificarusuario.html', context)\n" 
+                + "\telse:\n" 
+                + "\t\tpe.password = request.POST['password']\n"
+                + "\t\tpe.rol = request.POST['rol']\n" 
+                + "\t\ttry:\n" 
+                + "\t\t\tpe.save()\n" 
+                + "\t\t\tmessages.success(request, 'Usuario modificado')\n" 
+                + "\t\texcept:\n" 
+                + "\t\t\tmessages.warning(request, 'Error al modificar')\n" 
+                + "\treturn redirect('mostrarusuario')\n\n"
+                + "def eliminarusuario(request, id):\n" // No tiene control de rol.
+                + "\tpe = usuario.objects.get(id = id)\n" 
+                + "\ttry:\n" 
+                + "\t\tpe.delete()\n" 
+                + "\t\tmessages.success(request, 'Usuario eliminada')\n" 
+                + "\texcept:\n" 
+                + "\t\tmessages.warning(request, 'Error al eliminar')\n" 
+                + "\treturn redirect('mostrarusuario')\n\n";
         
         for (Clase clase : Clase.getClases().values()) {
-            // Todos las vistas de registrar
-            if (clase.getMetodos().containsKey("registra")){
+            // vistas de registra
+            if (clase.getMetodos().containsKey("registra")) {
                 for (Rol rol : clase.getMetodos().get("registra").getRoles().values()) {
-                    codigoView += "def " + rol.getNombre() + "registra" + clase.getNombre() + 
-                                "(request):\n" +
-                            "\tif request.session['rol'] is None:\n" +
-                            "\t\tmessages.warning(request,'Por favor inicie sesion')\n" +
-                            "\t\treturn redirect('index')\n" +
-                            "\telif request.session['rol'] != \"" + rol.getNombre() + "\":\n" +
-                            "\t\tmessages.warning(request,'Inicie sesion como " + 
-                                rol.getNombre() + "')\n" +
-                            "\t\treturn redirect('index')\n" +
-                            "\tif request.method == 'POST':\n" + 
-                            "\t\tpe = " + clase.getNombre() + "()\n";
-                    
-                    for (Atributo atributo : clase.getAtributos().values()) {
-                        codigoView += "\t\tpe." + atributo.getNombre() + " = " +
-                                "request.POST['" + atributo.getNombre() + "']\n";
-                    }
-                    
-                    codigoView += "\t\ttry:\n" + 
-                            "\t\t\tpe.save()\n" +
-                            "\t\t\tmessages.success(request,'" + clase.getNombre() + " registrado')\n" +
-                            "\t\texcept:\n" + 
-                            "\t\t\tmessages.warning(request,'Error al registrar')\n" + 
-                            "\t\treturn redirect('" + rol.getNombre() + "muestra" + 
-                                clase.getNombre() + "')\n" + 
-                            "\treturn render(request,'" + rol.getNombre() + "registra" + 
-                                clase.getNombre() + ".html',{})\n\n";
-                    
-                    /*
-                    Código para los demás métodos de view.
-                    */
-                    
-                }
-            }
+                    codigoView += "def " + rol.getNombre() + "registra" + clase.getNombre()
+                            + "(request):\n"
+                            + "\tif request.session['rol'] is None:\n"
+                            + "\t\tmessages.warning(request,'Por favor inicie sesion')\n"
+                            + "\t\treturn redirect('index')\n"
+                            + "\telif request.session['rol'] != \"" + rol.getNombre() + "\":\n"
+                            + "\t\tmessages.warning(request,'Inicie sesion como "
+                            + rol.getNombre() + "')\n"
+                            + "\t\treturn redirect('index')\n"
+                            + "\tif request.method == 'POST':\n"
+                            + "\t\tpe = " + clase.getNombre() + "()\n";
 
-              // vistas de elimina
-             if (clase.getMetodos().containsKey("elimina")){
-                for (Rol rol : clase.getMetodos().get("elimina").getRoles().values()) {
-                    codigoView += "def " + rol.getNombre() + "elimina" + clase.getNombre() + 
-                                "(request, id):\n" +
-                            "\tif request.session['rol'] is None:\n" +
-                            "\t\tmessages.warning(request,'Por favor inicie sesion')\n" +
-                            "\t\treturn redirect('index')\n" +
-                            "\telif request.session['rol'] != \"" + rol.getNombre() + "\":\n" +
-                            "\t\tmessages.warning(request,'Inicie sesion como " + 
-                                rol.getNombre() + "')\n" +
-                            "\t\treturn redirect('index')\n" +                          
-                            "\tpe = " + clase.getNombre() + ".objects.get(id = id)\n" +               
-                            "\ttry:\n" + 
-                            "\t\tpe.delete()\n" +
-                            "\t\tmessages.success(request,'" + clase.getNombre() + " eliminado')\n" +
-                            "\texcept:\n" + 
-                            "\t\tmessages.warning(request,'Error al Eliminar')\n" + 
-                            "\treturn redirect('" + rol.getNombre() + "muestra" + 
-                                clase.getNombre() + "')\n\n";
+                    for (Atributo atributo : clase.getAtributos().values()) {
+                        codigoView += "\t\tpe." + atributo.getNombre() + " = "
+                                + "request.POST['" + atributo.getNombre() + "']\n";
+                    }
+
+                    codigoView += "\t\ttry:\n"
+                            + "\t\t\tpe.save()\n"
+                            + "\t\t\tmessages.success(request,'" + clase.getNombre() + " registrado')\n"
+                            + "\t\texcept:\n"
+                            + "\t\t\tmessages.warning(request,'Error al registrar')\n"
+                            + "\t\treturn redirect('" + rol.getNombre() + "muestra"
+                            + clase.getNombre() + "')\n"
+                            + "\treturn render(request,'" + rol.getNombre() + "registra"
+                            + clase.getNombre() + ".html',{})\n\n";
                 }
             }
-             
-             // vistas de muestra
-             if (clase.getMetodos().containsKey("muestra")){
+            if (clase.getMetodos().containsKey("elimina")) {
+                for (Rol rol : clase.getMetodos().get("elimina").getRoles().values()) {
+                    codigoView += "def " + rol.getNombre() + "elimina" + clase.getNombre()
+                            + "(request, id):\n"
+                            + "\tif request.session['rol'] is None:\n"
+                            + "\t\tmessages.warning(request,'Por favor inicie sesion')\n"
+                            + "\t\treturn redirect('index')\n"
+                            + "\telif request.session['rol'] != \"" + rol.getNombre() + "\":\n"
+                            + "\t\tmessages.warning(request,'Inicie sesion como "
+                            + rol.getNombre() + "')\n"
+                            + "\t\treturn redirect('index')\n"
+                            + "\tpe = " + clase.getNombre() + ".objects.get(id = id)\n"
+                            + "\ttry:\n"
+                            + "\t\tpe.delete()\n"
+                            + "\t\tmessages.success(request,'" + clase.getNombre() + " eliminado')\n"
+                            + "\texcept:\n"
+                            + "\t\tmessages.warning(request,'Error al Eliminar')\n"
+                            + "\treturn redirect('" + rol.getNombre() + "muestra"
+                            + clase.getNombre() + "')\n\n";
+                }
+            }
+            // vistas de muestra
+            if (clase.getMetodos().containsKey("muestra")) {
                 for (Rol rol : clase.getMetodos().get("muestra").getRoles().values()) {
                     // obtengo el identificaro único
                     String identificador = null;
                     for (Atributo atributo : clase.getAtributos().values()) {
                         if (atributo.isIsPrimary()) {
                             identificador = atributo.getNombre();
-                        }                     
-                    }
-                    codigoView += "def " + rol.getNombre() + "muestra" + clase.getNombre() + 
-                                "(request):\n" +
-                            "\tif request.session['rol'] is None:\n" +
-                            "\t\tmessages.warning(request,'Por favor inicie sesion')\n" +
-                            "\t\treturn redirect('index')\n" +
-                            "\telif request.session['rol'] != \"" + rol.getNombre() + "\":\n" +
-                            "\t\tmessages.warning(request,'Inicie sesion como " + 
-                                rol.getNombre() + "')\n" +
-                            "\t\treturn redirect('index')\n" +
-                            "\tif request.method == 'POST' and request.POST['" + identificador + "']:\n" +                            
-                            "\t\tpa = " + clase.getNombre() + ".objects.filter(id = request.POST['" + identificador + "'])\n" +               
-                            "\telse:\n" +
-                            "\t\tpa = " + clase.getNombre() + ".objects.all()\n" +
-                            "\tcontext = { 'pa': pa }\n" +
-                            "\treturn render(request, '" + rol.getNombre() + "muestra" + 
-                                clase.getNombre() + ".html', context)\n\n";
-                }
-            }
-             // vistas para modifica
-             if (clase.getMetodos().containsKey("modifica")){
-                for (Rol rol : clase.getMetodos().get("modifica").getRoles().values()) {
-                    codigoView += "def " + rol.getNombre() + "modifica" + clase.getNombre() + 
-                                "(request):\n" +
-                            "\tif request.session['rol'] is None:\n" +
-                            "\t\tmessages.warning(request,'Por favor inicie sesion')\n" +
-                            "\t\treturn redirect('index')\n" +
-                            "\telif request.session['rol'] != \"" + rol.getNombre() + "\":\n" +
-                            "\t\tmessages.warning(request,'Inicie sesion como " + 
-                                rol.getNombre() + "')\n" +
-                            "\t\treturn redirect('index')\n" +
-                            "\tif request.method == 'GET':\n" + 
-                            "\t\tcontext = {'" + rol.getNombre() + "':pe}\n" + 
-                            "\t\treturn render(request,'" + rol.getNombre() + "modifica" + 
-                                clase.getNombre() + ".html',context)\n" +
-                            "\telse:\n"+
-                            "\t\tpe = " + clase.getNombre() + "()\n";
-                    for (Atributo atributo : clase.getAtributos().values()) {
-                        if(!atributo.isIsPrimary()){
-                            codigoView += "\t\tpe." + atributo.getNombre() + " = " +
-                                    "request.POST['" + atributo.getNombre() + "']\n";
                         }
                     }
-                    codigoView += "\t\ttry:\n" + 
-                            "\t\t\tpe.save()\n" +
-                            "\t\t\tmessages.success(request,'" + clase.getNombre() + " modificado')\n" +
-                            "\t\texcept:\n" + 
-                            "\t\t\tmessages.warning(request,'Error al modificar')\n" + 
-                            "\treturn redirect('" + rol.getNombre() + "muestra" + 
-                                clase.getNombre() + "')\n";
-                     
+                    codigoView += "def " + rol.getNombre() + "muestra" + clase.getNombre()
+                            + "(request):\n"
+                            + "\tif request.session['rol'] is None:\n"
+                            + "\t\tmessages.warning(request,'Por favor inicie sesion')\n"
+                            + "\t\treturn redirect('index')\n"
+                            + "\telif request.session['rol'] != \"" + rol.getNombre() + "\":\n"
+                            + "\t\tmessages.warning(request,'Inicie sesion como "
+                            + rol.getNombre() + "')\n"
+                            + "\t\treturn redirect('index')\n"
+                            + "\tif request.method == 'POST' and request.POST['" + identificador + "']:\n"
+                            + "\t\tpa = " + clase.getNombre() + ".objects.filter(id = request.POST['" + identificador + "'])\n"
+                            + "\telse:\n"
+                            + "\t\tpa = " + clase.getNombre() + ".objects.all()\n"
+                            + "\tcontext = { 'pa': pa }\n"
+                            + "\treturn render(request, '" + rol.getNombre() + "muestra"
+                            + clase.getNombre() + ".html', context)\n\n";
                 }
-             }
-        }
-        
-        /*
-        Código para login.
-        */
-        codigoView += "def login(request):\n" +
-                "\tif request.method == \"POST\":\n"+
-                "\t\tuser = request.POST['usuario']\n"+
-                "\t\tpas = request.POST['contrasena']\n"+
-                "\t\ttry:\n" + "\t\t\tusuario = usuario.objects.get(username = user, password = pas)\n";
-        for (Rol rol : Rol.getRoles().values()) {
+            }
             
-            codigoView += "\t\t\tif usuario.rol == \""+rol.getNombre()+"\":\n"+
-                          "\t\t\t\trequest.session['rol'] = \""+rol.getNombre()+"\"\n"+
-                          "\t\t\t\treturn redirect('menu"+rol.getNombre()+"')\n";
+            // vistas de modifica
+            if (clase.getMetodos().containsKey("modifica")) {
+                for (Rol rol : clase.getMetodos().get("modifica").getRoles().values()) {
+                    codigoView += "def " + rol.getNombre() + "modifica" + clase.getNombre()
+                            + "(request, id):\n"
+                            + "\tif request.session['rol'] is None:\n"
+                            + "\t\tmessages.warning(request,'Por favor inicie sesion')\n"
+                            + "\t\treturn redirect('index')\n"
+                            + "\telif request.session['rol'] != \"" + rol.getNombre() + "\":\n"
+                            + "\t\tmessages.warning(request,'Inicie sesion como "
+                            + rol.getNombre() + "')\n"
+                            + "\t\treturn redirect('index')\n"
+                            + "\tpe = " + clase.getNombre() + ".objects.get(id = id)\n"
+                            + "\tif request.method == 'GET':\n"
+                            + "\t\tcontext = {'" + rol.getNombre() + "':pe}\n"
+                            + "\t\treturn render(request,'" + rol.getNombre() + "modifica"
+                            + clase.getNombre() + ".html',context)\n"
+                            + "\telse:\n";
+                    
+                    for (Atributo atributo : clase.getAtributos().values()) {
+                        if (!atributo.isIsPrimary()) {
+                            codigoView += "\t\tpe." + atributo.getNombre() + " = "
+                                    + "request.POST['" + atributo.getNombre() + "']\n";
+                        }
+                    }
+                    codigoView += "\t\ttry:\n"
+                            + "\t\t\tpe.save()\n"
+                            + "\t\t\tmessages.success(request,'" + clase.getNombre() + " modificado')\n"
+                            + "\t\texcept:\n"
+                            + "\t\t\tmessages.warning(request,'Error al modificar')\n"
+                            + "\treturn redirect('" + rol.getNombre() + "muestra"
+                            + clase.getNombre() + "')\n";
+                }
+            }
         }
-        codigoView += "\t\texcept:\n"+
-                     "\t\t\tmessages.warning(request,'Usuario o contraseña incorrectos')\n"+
-                    "\treturn render(request, \"index.html\",{})\n";
-        //Logout
-        codigoView += "def logout(request):\n" +
-                "\trequest.session['rol'] = None\n" +
-                "\treturn redirect('index')";
+        // Login
+        codigoView += "def login(request):\n"
+                + "\tif request.method == \"POST\":\n"
+                + "\t\tuser = request.POST['usuario']\n"
+                + "\t\tpas = request.POST['contrasena']\n"
+                + "\t\ttry:\n" + "\t\t\tusuario = usuario.objects.get(username = user, password = pas)\n";
         
+        for (Rol rol : Rol.getRoles().values()) {
+            codigoView += "\t\t\tif usuario.rol == \"" + rol.getNombre() + "\":\n"
+                    + "\t\t\t\trequest.session['rol'] = \"" + rol.getNombre() + "\"\n"
+                    + "\t\t\t\treturn redirect('menu" + rol.getNombre() + "')\n";
+        }
+        
+        codigoView += "\t\texcept:\n"
+                + "\t\t\tmessages.warning(request,'Usuario o contraseña incorrectos')\n"
+                + "\treturn render(request, \"index.html\",{})\n";
+        
+        // Logout
+        codigoView += "def logout(request):\n"
+                + "\trequest.session['rol'] = None\n"
+                + "\treturn redirect('index')";
+
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
@@ -290,7 +324,7 @@ public class TraductorDjango {
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(codigoView);
             bw.close();
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -306,7 +340,7 @@ public class TraductorDjango {
             }
         }
     }
-    
+
     public static void modificarUrls() {
         File archivo = null;
         FileReader fr = null;
@@ -320,17 +354,17 @@ public class TraductorDjango {
                     + "path('admin/', admin.site.urls),\n"
                     + "url(r'^$',login,name = \"index\"),\n"
                     + "url(r'^logout/',logout,name = \"logout\"),\n"
-                    + "url(r'^regitrausuario/',registrausuario,name = \"registrausuario\"),\n"
+                    + "url(r'^registrausuario/',registrausuario,name = \"registrausuario\"),\n"
                     + "url(r'^muestrausuario/',muestrausuario,name = \"muestrausuario\"),\n"
                     + "url(r'^modificausuario/(?P<id>\\w+)/$',modificausuario,name = \"modificausuario\"),\n"
                     + "url(r'^eliminausuario/(?P<id>\\w+)/$',eliminausuario,name = \"eliminausuario\"),\n";
             for (Rol rol : Rol.roles.values()) {
                 for (Metodo metodo : rol.getMetodos().values()) {
-                    String nombre = rol.getNombre()+metodo.getNombre()+metodo.getClase().getNombre();
-                    if(metodo.getNombre().equals("elimina") || metodo.getNombre().equals("modifica")){
-                        documento += "url(r'^" + nombre + "/(?P<id>\\w+)/$',"+nombre+",name = \""+nombre+"\"),\n";
-                    }else if(!metodo.getNombre().equals("busca")){
-                        documento += "url(r'^" + nombre + "/',"+nombre+",name = \""+nombre+"\"),\n";
+                    String nombre = rol.getNombre() + metodo.getNombre() + metodo.getClase().getNombre();
+                    if (metodo.getNombre().equals("elimina") || metodo.getNombre().equals("modifica")) {
+                        documento += "url(r'^" + nombre + "/(?P<id>\\w+)/$'," + nombre + ",name = \"" + nombre + "\"),\n";
+                    } else if (!metodo.getNombre().equals("busca")) {
+                        documento += "url(r'^" + nombre + "/'," + nombre + ",name = \"" + nombre + "\"),\n";
                     }
                 }
             }
