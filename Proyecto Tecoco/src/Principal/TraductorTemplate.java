@@ -567,8 +567,8 @@ public class TraductorTemplate {
                 + nomClase.replace("_", " ") + "</a>\n<div class=\""
                 + "dropdown-menu\" role=\"presentation\">\n";
         for (Metodo metodo : metodos.values()) {
-            menu += "<a class=\"dropdown-item\" href=\"" + nomRol
-                    + metodo.getNombre() + nomClase + ".html\">"
+            menu += "<a class=\"dropdown-item\" href=\"{% url '" + nomRol
+                    + metodo.getNombre() + nomClase + "' %}\" >"
                     + metodo.getNombre().replace("_", " ") + "</a>\n";
         }
         menu += "</div>\n</li>";
