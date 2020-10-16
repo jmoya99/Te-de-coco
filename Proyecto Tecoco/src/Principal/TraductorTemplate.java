@@ -107,6 +107,7 @@ public class TraductorTemplate {
                         for (Atributo atributo : metodo.getParametros().values()) {
                             campos += campoDeTexto(atributo.getNombre()) + "\n";
                         }
+                        documento = documento.replace("<--rol-->", rol.getNombre());
                         documento = documento.replace("<--campos-->", campos);
                         documento = documento.replace("<--accion-->", metodo.getNombre());
                         documento = documento.replace("<--titulo-->", metodo.getNombre() + " " + metodo.getClase().getNombre());
@@ -186,6 +187,7 @@ public class TraductorTemplate {
                                 campos += campoDeTexto(atributo.replace("_", " ")) + "\n";
                             }
                         }
+                        documento = documento.replace("<--rol-->", rol.getNombre());
                         documento = documento.replace("<--campos-->", campos);
 
                         switch (metodo.getNombre()) {
@@ -267,6 +269,7 @@ public class TraductorTemplate {
                             columnas += crearColumna(atributo);
                             fila += crearDatoColumna(atributo) + "\n";
                         }
+                        documento = documento.replace("<--rol-->", rol.getNombre());
                         documento = documento.replace("<-- Columnas -->", columnas);
                         documento = documento.replace("<-- Fila -->", fila);
 

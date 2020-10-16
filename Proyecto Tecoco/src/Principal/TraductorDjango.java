@@ -87,9 +87,7 @@ public class TraductorDjango {
             }
             documento += "\nSTATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]";
             int ini, fin;
-            ini = documento.indexOf("from");
-            fin = documento.indexOf("Path", ini);
-            documento = documento.replace(documento.substring(ini, fin + 4), documento.substring(ini, fin + 4) + "\nimport os\n");
+            documento = "import os\n" + documento;
             ini = documento.indexOf("INSTALLED_APPS");
             fin = documento.indexOf("]", ini);
             documento = documento.replace(documento.substring(ini, fin), documento.substring(ini, fin) + "\t'application',\n");
@@ -275,7 +273,10 @@ public class TraductorDjango {
                     + "path('admin/', admin.site.urls),\n"
                     + "url(r'^$',login,name = \"index\"),\n"
                     + "url(r'^logout/',logout,name = \"logout\"),\n"
-                    + "";//Agregar lo de usuario
+                    + "url(r'^regitrausuario/',registrausuario,name = \"registrausuario\"),\n"
+                    + "url(r'^muestrausuario/',muestrausuario,name = \"muestrausuario\"),\n"
+                    + "url(r'^modificausuario/(?P<id>\\w+)/$',modificausuario,name = \"modificausuario\"),\n"
+                    + "url(r'^eliminausuario/(?P<id>\\w+)/$',eliminausuario,name = \"eliminausuario\"),\n";
             for (Rol rol : Rol.roles.values()) {
                 for (Metodo metodo : rol.getMetodos().values()) {
                     String nombre = rol.getNombre()+metodo.getNombre()+metodo.getClase().getNombre();
@@ -286,6 +287,7 @@ public class TraductorDjango {
                     }
                 }
             }
+            documento += "]";
             //Crear el archivo
             File file = new File(TraductorDjango.d + "/" + TraductorTemplate.nombreP + "/urls.py");
             file.delete();
