@@ -234,7 +234,8 @@ public class TraductorDjango {
                             "\t\tcontext = {'" + rol.getNombre() + "':pe}\n" + 
                             "\t\treturn render(request,'" + rol.getNombre() + "modifica" + 
                                 clase.getNombre() + ".html',context)\n" +
-                            "\telse:\n";
+                            "\telse:\n"+
+                            "\t\tpe = " + clase.getNombre() + "()\n";
                     for (Atributo atributo : clase.getAtributos().values()) {
                         if(!atributo.isIsPrimary()){
                             codigoView += "\t\tpe." + atributo.getNombre() + " = " +
