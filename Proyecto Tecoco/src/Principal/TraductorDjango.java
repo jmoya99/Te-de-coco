@@ -5,7 +5,6 @@
  */
 package Principal;
 
-import static Principal.TraductorTemplate.d;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -121,6 +120,193 @@ public class TraductorDjango {
         }
     }
 
+    public static void generarView() {
+        String codigoView = "from django.shortcuts import render, redirect\n" +
+                        "from .models import *\n" +
+                        "from django.contrib import messages\n" +
+                        "from django.contrib.auth import authenticate\n" +
+                        "from django.contrib.auth.forms import AuthenticationForm\n" +
+                        "from django.contrib.auth import login as do_login\n" +
+                        "from django.contrib.auth import logout as do_logout\n\n";
+        
+        for (Clase clase : Clase.getClases().values()) {
+            // Todos las vistas de registrar
+            if (clase.getMetodos().containsKey("registra")){
+                for (Rol rol : clase.getMetodos().get("registra").getRoles().values()) {
+                    codigoView += "def " + rol.getNombre() + "registra" + clase.getNombre() + 
+                                "(request):\n" +
+                            "\tif request.session['rol'] is None:\n" +
+                            "\t\tmessages.warning(request,'Por favor inicie sesion')\n" +
+                            "\t\treturn redirect('index')\n" +
+                            "\telif request.session['rol'] != \"" + rol.getNombre() + "\":\n" +
+                            "\t\tmessages.warning(request,'Inicie sesion como " + 
+                                rol.getNombre() + "')\n" +
+                            "\t\treturn redirect('index')\n" +
+                            "\tif request.method == 'POST':\n" + 
+                            "\t\tpe = " + clase.getNombre() + "()\n";
+                    
+                    for (Atributo atributo : clase.getAtributos().values()) {
+                        codigoView += "\t\tpe." + atributo.getNombre() + " = " +
+                                "request.POST['" + atributo.getNombre() + "']\n";
+                    }
+                    
+                    codigoView += "\t\ttry:\n" + 
+                            "\t\t\tpe.save()\n" +
+                            "\t\t\tmessages.success(request,'" + clase.getNombre() + " registrado')\n" +
+                            "\t\texcept:\n" + 
+                            "\t\t\tmessages.warning(request,'Error al registrar')\n" + 
+                            "\t\treturn redirect('" + rol.getNombre() + "muestra" + 
+                                clase.getNombre() + "')\n" + 
+                            "\treturn render(request,'" + rol.getNombre() + "registra" + 
+                                clase.getNombre() + ".html',{})\n\n";
+                    
+                    /*
+                    Código para los demás métodos de view.
+                    */
+                    
+                }
+            }
+
+              // vistas de elimina
+             if (clase.getMetodos().containsKey("elimina")){
+                for (Rol rol : clase.getMetodos().get("elimina").getRoles().values()) {
+                    codigoView += "def " + rol.getNombre() + "elimina" + clase.getNombre() + 
+                                "(request, id):\n" +
+                            "\tif request.session['rol'] is None:\n" +
+                            "\t\tmessages.warning(request,'Por favor inicie sesion')\n" +
+                            "\t\treturn redirect('index')\n" +
+                            "\telif request.session['rol'] != \"" + rol.getNombre() + "\":\n" +
+                            "\t\tmessages.warning(request,'Inicie sesion como " + 
+                                rol.getNombre() + "')\n" +
+                            "\t\treturn redirect('index')\n" +                          
+                            "\tpe = " + clase.getNombre() + ".objects.get(id = id)\n" +               
+                            "\ttry:\n" + 
+                            "\t\tpe.delete()\n" +
+                            "\t\tmessages.success(request,'" + clase.getNombre() + " eliminado')\n" +
+                            "\texcept:\n" + 
+                            "\t\tmessages.warning(request,'Error al Eliminar')\n" + 
+                            "\treturn redirect('" + rol.getNombre() + "muestra" + 
+                                clase.getNombre() + "')\n\n";
+                }
+            }
+             
+             // vistas de muestra
+             if (clase.getMetodos().containsKey("muestra")){
+                for (Rol rol : clase.getMetodos().get("muestra").getRoles().values()) {
+                    // obtengo el identificaro único
+                    String identificador = null;
+                    for (Atributo atributo : clase.getAtributos().values()) {
+                        if (atributo.isIsPrimary()) {
+                            identificador = atributo.getNombre();
+                        }                     
+                    }
+                    codigoView += "def " + rol.getNombre() + "muestra" + clase.getNombre() + 
+                                "(request):\n" +
+                            "\tif request.session['rol'] is None:\n" +
+                            "\t\tmessages.warning(request,'Por favor inicie sesion')\n" +
+                            "\t\treturn redirect('index')\n" +
+                            "\telif request.session['rol'] != \"" + rol.getNombre() + "\":\n" +
+                            "\t\tmessages.warning(request,'Inicie sesion como " + 
+                                rol.getNombre() + "')\n" +
+                            "\t\treturn redirect('index')\n" +
+                            "\tif request.method == 'POST' and request.POST['" + identificador + "']:\n" +                            
+                            "\t\tpa = " + clase.getNombre() + ".objects.filter(id = request.POST['" + identificador + "'])\n" +               
+                            "\telse:\n" +
+                            "\t\tpa = " + clase.getNombre() + ".objects.all()\n" +
+                            "\tcontext = { 'pa': pa }\n" +
+                            "\treturn render(request, '" + rol.getNombre() + "muestra" + 
+                                clase.getNombre() + ".html', context)\n\n";
+                }
+            }
+             // vistas para modifica
+             if (clase.getMetodos().containsKey("modifica")){
+                for (Rol rol : clase.getMetodos().get("modifica").getRoles().values()) {
+                    codigoView += "def " + rol.getNombre() + "modifica" + clase.getNombre() + 
+                                "(request):\n" +
+                            "\tif request.session['rol'] is None:\n" +
+                            "\t\tmessages.warning(request,'Por favor inicie sesion')\n" +
+                            "\t\treturn redirect('index')\n" +
+                            "\telif request.session['rol'] != \"" + rol.getNombre() + "\":\n" +
+                            "\t\tmessages.warning(request,'Inicie sesion como " + 
+                                rol.getNombre() + "')\n" +
+                            "\t\treturn redirect('index')\n" +
+                            "\tif request.method == 'GET':\n" + 
+                            "\t\tcontext = {'" + rol.getNombre() + "':pe}\n" + 
+                            "\t\treturn render(request,'" + rol.getNombre() + "modifica" + 
+                                clase.getNombre() + ".html',context)\n" +
+                            "\telse:\n"+
+                            "\t\tpe = " + clase.getNombre() + "()\n";
+                    for (Atributo atributo : clase.getAtributos().values()) {
+                        if(!atributo.isIsPrimary()){
+                            codigoView += "\t\tpe." + atributo.getNombre() + " = " +
+                                    "request.POST['" + atributo.getNombre() + "']\n";
+                        }
+                    }
+                    codigoView += "\t\ttry:\n" + 
+                            "\t\t\tpe.save()\n" +
+                            "\t\t\tmessages.success(request,'" + clase.getNombre() + " modificado')\n" +
+                            "\t\texcept:\n" + 
+                            "\t\t\tmessages.warning(request,'Error al modificar')\n" + 
+                            "\treturn redirect('" + rol.getNombre() + "muestra" + 
+                                clase.getNombre() + "')\n";
+                     
+                }
+             }
+        }
+        
+        /*
+        Código para login.
+        */
+        codigoView += "def login(request):\n" +
+                "\tif request.method == \"POST\":\n"+
+                "\t\tuser = request.POST['usuario']\n"+
+                "\t\tpas = request.POST['contrasena']\n"+
+                "\t\ttry:\n" + "\t\t\tusuario = usuario.objects.get(username = user, password = pas)\n";
+        for (Rol rol : Rol.getRoles().values()) {
+            
+            codigoView += "\t\t\tif usuario.rol == \""+rol.getNombre()+"\":\n"+
+                          "\t\t\t\trequest.session['rol'] = \""+rol.getNombre()+"\"\n"+
+                          "\t\t\t\treturn redirect('menu"+rol.getNombre()+"')\n";
+        }
+        codigoView += "\t\texcept:\n"+
+                     "\t\t\tmessages.warning(request,'Usuario o contraseña incorrectos')\n"+
+                    "\treturn render(request, \"index.html\",{})\n";
+        //Logout
+        codigoView += "def logout(request):\n" +
+                "\trequest.session['rol'] = None\n" +
+                "\treturn redirect('index')";
+        
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+        try {
+            //Crear el archivo
+            File file = new File(d + "/application/views.py");
+            file.delete();
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(codigoView);
+            bw.close();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero, para asegurarnos
+            // que se cierra tanto si todo va bien como si salta 
+            // una excepcion.
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+    
     public static void modificarUrls() {
         File archivo = null;
         FileReader fr = null;
@@ -175,5 +361,4 @@ public class TraductorDjango {
             }
         }
     }
-
 }
