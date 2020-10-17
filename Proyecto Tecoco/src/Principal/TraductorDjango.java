@@ -186,8 +186,6 @@ public class TraductorDjango {
                                 + "\telif request.session['rol'] != '" + rol.getNombre() + "':\n" 
                                 + "\t\tmessages.warning(request,'Inicie sesion como " + rol.getNombre() + "')\n" 
                                 + "\t\treturn redirect('index')\n" 
-                                + "\tif request.method == 'POST':\n" 
-                                + "\t\treturn redirect('')\n" // Acá se debe poner una ruta genérica para el Rol.
                                 + "\treturn render(request,'" + rol.getNombre() + metodo.getNombre() 
                                 + clase.getNombre() + ".html',{})\n\n";
                     }
