@@ -17,7 +17,12 @@ import java.io.FileWriter;
  */
 public class TraductorDjango {
 
-    public static String d = "Resultado/" + TraductorTemplate.nombreP;
+    public static String d = "Resultado/";
+    public static String nombreP = "";
+    
+    public static void direccionProyecto() {
+        d += nombreP;
+    }
 
     public static void generarModelo() {
         String codigoModelo = "from django.db import models\n\n"
@@ -77,7 +82,7 @@ public class TraductorDjango {
         try {
             // Apertura del fichero y creacion de BufferedReader para poder
             // hacer una lectura comoda (disponer del metodo readLine()).
-            archivo = new File(TraductorDjango.d + "/" + TraductorTemplate.nombreP + "/settings.py");
+            archivo = new File(TraductorDjango.d + "/" + TraductorDjango.nombreP + "/settings.py");
             fr = new FileReader(archivo);
             br = new BufferedReader(fr);
             // Lectura del fichero
@@ -95,7 +100,7 @@ public class TraductorDjango {
             documento = documento.replace("'DIRS': [],", "'DIRS': [os.path.join(BASE_DIR,'templates')],");
             br.close();
             //Crear el archivo
-            File file = new File(TraductorDjango.d + "/" + TraductorTemplate.nombreP + "/settings.py");
+            File file = new File(TraductorDjango.d + "/" + TraductorDjango.nombreP + "/settings.py");
             file.delete();
             if (!file.exists()) {
                 file.createNewFile();
@@ -144,16 +149,16 @@ public class TraductorDjango {
                 + "\treturn render(request, 'registrausuario.html', {})\n\n"
                 + "def muestrausuario(request):\n" // No tiene control de rol.
                 + "\tif request.method == 'POST' and request.POST['username']:\n" 
-                + "\t\tpa = usuario.objects.filter(id = request.POST['username'])\n"
+                + "\t\tpa = usuario.objects.filter(username = request.POST['username'])\n"
                 + "\telse:\n"
                 + "\t\tpa = usuario.objects.all()\n"
                 + "\tcontext = { 'pa': pa }\n"
                 + "\treturn render(request, 'muestrausuario.html', context)\n\n"
                 + "def modificausuario(request, id):\n" // No tiene control de rol.
-                + "\tpe = usuario.objects.get(id = username)\n" 
+                + "\tpe = usuario.objects.get(username = id)\n" 
                 + "\tif request.method == 'GET':\n" 
                 + "\t\tcontext = {'usuario': pe}\n" 
-                + "\t\treturn render(request, 'modificarusuario.html', context)\n" 
+                + "\t\treturn render(request, 'modificausuario.html', context)\n" 
                 + "\telse:\n" 
                 + "\t\tpe.password = request.POST['password']\n"
                 + "\t\tpe.rol = request.POST['rol']\n" 
@@ -162,15 +167,15 @@ public class TraductorDjango {
                 + "\t\t\tmessages.success(request, 'Usuario modificado')\n" 
                 + "\t\texcept:\n" 
                 + "\t\t\tmessages.warning(request, 'Error al modificar')\n" 
-                + "\treturn redirect('mostrarusuario')\n\n"
+                + "\treturn redirect('muestrausuario')\n\n"
                 + "def eliminausuario(request, id):\n" // No tiene control de rol.
-                + "\tpe = usuario.objects.get(id = id)\n" 
+                + "\tpe = usuario.objects.get(username = id)\n" 
                 + "\ttry:\n" 
                 + "\t\tpe.delete()\n" 
                 + "\t\tmessages.success(request, 'Usuario eliminada')\n" 
                 + "\texcept:\n" 
                 + "\t\tmessages.warning(request, 'Error al eliminar')\n" 
-                + "\treturn redirect('mostrarusuario')\n\n";
+                + "\treturn redirect('muestrausuario')\n\n";
         
         for (Clase clase : Clase.getClases().values()) {
             Atributo primary = null;
@@ -272,7 +277,8 @@ public class TraductorDjango {
                             + rol.getNombre() + "')\n"
                             + "\t\treturn redirect('index')\n"
                             + "\tif request.method == 'POST' and request.POST['" + identificador + "']:\n"
-                            + "\t\tpa = " + clase.getNombre() + ".objects.filter(id = request.POST['" + identificador + "'])\n"
+                            + "\t\tpa = " + clase.getNombre() + ".objects.filter(" + primary.getNombre() 
+                            + " = request.POST['" + identificador + "'])\n"
                             + "\telse:\n"
                             + "\t\tpa = " + clase.getNombre() + ".objects.all()\n"
                             + "\tcontext = { 'pa': pa }\n"
@@ -381,7 +387,7 @@ public class TraductorDjango {
             }
             documento += "]";
             //Crear el archivo
-            File file = new File(TraductorDjango.d + "/" + TraductorTemplate.nombreP + "/urls.py");
+            File file = new File(TraductorDjango.d + "/" + TraductorDjango.nombreP + "/urls.py");
             file.delete();
             if (!file.exists()) {
                 file.createNewFile();

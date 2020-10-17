@@ -54,7 +54,7 @@ public class TraductorTemplate {
             while ((linea = br.readLine()) != null) {
                 documento += "\n" + linea;
             }
-            documento = documento.replace("<-- TituloProyecto -->", nombreP);
+            documento = documento.replace("<-- TituloProyecto -->", nombreP.replace("_", " "));
 
             //Crear el archivo
             File file = new File(TraductorTemplate.d + "/header.html");
@@ -83,7 +83,6 @@ public class TraductorTemplate {
         }
     }
     
-    
     public static void generarFooter() {
         File archivo = null;
         FileReader fr = null;
@@ -99,7 +98,7 @@ public class TraductorTemplate {
             while ((linea = br.readLine()) != null) {
                 documento += "\n" + linea;
             }
-            documento = documento.replace("<--Titulo-->", TraductorTemplate.nombreP);
+            documento = documento.replace("<--Titulo-->", nombreP.replace("_", " "));
 
             //Crear el archivo
             File file = new File(TraductorTemplate.d + "/footer.html");
@@ -302,7 +301,7 @@ public class TraductorTemplate {
 
                         for (Atributo atributo : muestra.getClase().getAtributos().values()) {
                             if (atributo.isPrimary()) {
-                                documento = documento.replace("<-- Identificador -->", atributo.getNombre());
+                                documento = documento.replaceAll("<-- Identificador -->", atributo.getNombre());
                             }
                         }
 
@@ -328,7 +327,7 @@ public class TraductorTemplate {
                         if (clase.getMetodos().containsKey("registra")
                                 && clase.getMetodos().get("registra").getRoles().containsKey(rol.getNombre())) {
                             botonRegistra = "<a href=\"{% url '" + rol.getNombre() + "registra" + clase.getNombre() + "' %}\"><button class=\"btn btn-success\" id=\"btnRegistrar\" style=\"margin-left: 5px;\""
-                                    + "type=\"submit\"><p title=\"Registrar\"><i class=\"fa fa-plus\" style=\"font-size: 15px;\"></i>&nbsp;Registrar</p></button></a>";
+                                    + "type=\"button\"><p title=\"Registrar\"><i class=\"fa fa-plus\" style=\"font-size: 15px;\"></i>&nbsp;Registrar</p></button></a>";
                         }
                         if (clase.getMetodos().containsKey("modifica") || clase.getMetodos().containsKey("elimina")) {
                             String primary = null;
@@ -339,12 +338,12 @@ public class TraductorTemplate {
                             }
                             if (clase.getMetodos().containsKey("modifica")
                                     && clase.getMetodos().get("modifica").getRoles().containsKey(rol.getNombre())) {
-                                botonModifica = "<a href=\"{% url '" + rol.getNombre() + "modifica" + clase.getNombre() + "' id=p." + primary + " %}\"><button class=\"btn btn-success\" style=\"margin-left: 5px;background: rgb(36,129,167);\" type=\"submit\"><p "
+                                botonModifica = "<a href=\"{% url '" + rol.getNombre() + "modifica" + clase.getNombre() + "' id=p." + primary + " %}\"><button class=\"btn btn-success\" style=\"margin-left: 5px;background: rgb(36,129,167);\" type=\"button\"><p "
                                         + "title=\"Modificar\"><i class=\"fa fa-pencil\" style=\"font-size: 15px;\"></i></p></button></a>";
                             }
                             if (clase.getMetodos().containsKey("elimina")
                                     && clase.getMetodos().get("elimina").getRoles().containsKey(rol.getNombre())) {
-                                botonElimina = "<a href=\"{% url '" + rol.getNombre() + "elimina" + clase.getNombre() + "' id=p." + primary + " %}\"><button class=\"btn btn-danger\" style=\"margin-left: 5px;\" type=\"submit\"><p "
+                                botonElimina = "<a href=\"{% url '" + rol.getNombre() + "elimina" + clase.getNombre() + "' id=p." + primary + " %}\"><button class=\"btn btn-danger\" style=\"margin-left: 5px;\" type=\"button\"><p "
                                         + "title=\"Eliminar\"><i class=\"fa fa-trash\" style=\"font-size: 15px;\"></i></p></button></a>";
                             }
                             td = "<td>";
@@ -419,7 +418,7 @@ public class TraductorTemplate {
                 while ((linea = br.readLine()) != null) {
                     documento += "\n" + linea;
                 }
-                documento = documento.replaceAll("<-- TituloProyecto -->", nombreP);
+                documento = documento.replaceAll("<-- TituloProyecto -->", nombreP.replace("_", " "));
                 documento = documento.replace("<-- subMenus -->", subMenus);
 
                 //Crear el archivo
@@ -463,11 +462,31 @@ public class TraductorTemplate {
             // Apertura del fichero y creacion de BufferedReader para poder
             // hacer una lectura comoda (disponer del metodo readLine()).
             //muestra usuario
-            archivo = new File("Plantillas/muestrausuario.txt");
+            archivo = new File("Plantillas/usuario.txt");
             fr = new FileReader(archivo);
             br = new BufferedReader(fr);
             // Lectura del fichero
 
+            while ((linea = br.readLine()) != null) {
+                documento += "\n" + linea;
+            }
+            documento = documento.replace("<-- TituloProyecto -->", nombreP.replace("_", " "));
+            file = new File(TraductorTemplate.d + "/usuario.html");
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            fw = new FileWriter(file);
+            bw = new BufferedWriter(fw);
+            bw.write(documento);
+            bw.close();
+            
+            archivo = new File("Plantillas/muestrausuario.txt");
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+            // Lectura del fichero
+            
+            documento = "";
             while ((linea = br.readLine()) != null) {
                 documento += "\n" + linea;
             }

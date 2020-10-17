@@ -130,12 +130,15 @@ public class InterfazDeEntrada extends JFrame {
         btnCrear.setEnabled(false);
         try {
             String nom = JOptionPane.showInputDialog("Ingrese el nombre del proyecto");
+            nom = nom.replace(" ", "_");
             TraductorTemplate.nombreP = nom;
             TraductorTemplate.direccionProyecto();
             for (File csv : csvs) {
                 Main.interpretar(csv);
             }
             TraductorComandos.nombreP = nom;
+            TraductorDjango.nombreP = nom;
+            TraductorDjango.direccionProyecto();
             TraductorComandos.generarScripts();
             TraductorTemplate.copiarDirectorio(TraductorTemplate.o, TraductorTemplate.rutaStatic);
             TraductorTemplate.comprobarCrearDirectorio(TraductorTemplate.d);

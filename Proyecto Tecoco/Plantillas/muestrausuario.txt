@@ -11,9 +11,10 @@
   -moz-box-shadow: 0px 0px 0px 0px rgba(0,0,0,0);
   box-shadow: 0px 0px 0px 0px rgba(0,0,0,0);
   z-index: 0;">
-                            <input type="text" placeholder="Ingrese el nombre de usuario">
+			{% csrf_token %}
+                            <input type="text" placeholder="Ingrese el nombre de usuario" name="username">
                             <button class="btn btn-success" id="btnBuscar" style="margin-left: 5px;" type="submit"><p title="Buscar"><i class="fa fa-search" style="font-size: 15px;"></i></p></button>
-                            <a href="{% url 'registrausuario' %}"><button class="btn btn-success" id="btnRegistrar" style="margin-left: 5px;"type="submit"><p title="Registrar"><i class="fa fa-plus" style="font-size: 15px;"></i>&nbsp;Registrar</p></button></a> 
+                            <a href="{% url 'registrausuario' %}"><button class="btn btn-success" id="btnRegistrar" style="margin-left: 5px;"type="button"><p title="Registrar"><i class="fa fa-plus" style="font-size: 15px;"></i>&nbsp;Registrar</p></button></a> 
                         </form>    
                             </div>
                         <div class="table-responsive table-bordered table table-hover table-bordered results">
@@ -31,8 +32,8 @@
                                     <tr>
 					                    <td>{{p.username}}</td>
 					                    <td>{{p.rol}}</td>
-					<td>  <a href="{% url 'modificausuario' id=p.username %}"><button class="btn btn-success" style="margin-left: 5px;background: rgb(36,129,167);" type="submit"><p title="Modificar"><i class="fa fa-pencil" style="font-size: 15px;"></i></p></button></a>
-                                            <a href="{% url 'eliminausuario' id=p.username %}"><button class="btn btn-danger" style="margin-left: 5px;" type="submit"><p title="Eliminar"><i class="fa fa-trash" style="font-size: 15px;"></i></p></button></a> </td>
+					<td>  <a href="{% url 'modificausuario' id=p.username %}"><button class="btn btn-success" style="margin-left: 5px;background: rgb(36,129,167);" type="button"><p title="Modificar"><i class="fa fa-pencil" style="font-size: 15px;"></i></p></button></a>
+                                            <a href="{% url 'eliminausuario' id=p.username %}"><button class="btn btn-danger" style="margin-left: 5px;" type="button"><p title="Eliminar"><i class="fa fa-trash" style="font-size: 15px;"></i></p></button></a> </td>
                                     </tr>
                                     {% endfor %}
                                 {% endif %}

@@ -11,7 +11,8 @@
   -moz-box-shadow: 0px 0px 0px 0px rgba(0,0,0,0);
   box-shadow: 0px 0px 0px 0px rgba(0,0,0,0);
   z-index: 0;">
-                            <input type="text" placeholder="Ingrese <-- Identificador -->">
+			{% csrf_token %}
+                            <input type="text" placeholder="Ingrese <-- Identificador -->" name="<-- Identificador -->">
                             <button class="btn btn-success" id="btnBuscar" style="margin-left: 5px;" type="submit"><p title="Buscar"><i class="fa fa-search" style="font-size: 15px;"></i></p></button>
                             <-- Registra --> 
                         </form>    
