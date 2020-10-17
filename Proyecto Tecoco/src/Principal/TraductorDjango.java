@@ -328,7 +328,7 @@ public class TraductorDjango {
                 + "\t\tusername = request.POST['usuario']\n"
                 + "\t\tpassword = request.POST['contrasena']\n"
                 + "\t\tif username == \"superusuario\" and password == \"12345\"\n"
-                + "\t\t\treturn redirect('muestrausuario')\n"
+                + "\t\t\treturn render(request,'muestrausuario.html',{})\n"
                 + "\t\ttry:\n" + "\t\t\tusuario = usuario.objects.get(username = username, password = password)\n";
         for (Rol rol : Rol.getRoles().values()) {
             codigoView += "\t\t\tif usuario.rol == \"" + rol.getNombre() + "\":\n"
