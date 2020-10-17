@@ -149,7 +149,7 @@ public class TraductorTemplate {
                         }
                         String campos = "";
                         for (Atributo atributo : metodo.getParametros().values()) {
-                            campos += campoDeTexto(atributo.getNombre()) + "\n";
+                            campos += campoDeTexto(atributo.getNombre(), false) + "\n";
                         }
                         documento = documento.replace("<--rol-->", rol.getNombre());
                         documento = documento.replace("<--campos-->", campos);
@@ -228,7 +228,11 @@ public class TraductorTemplate {
                             if (metodo.getNombre().equals("modifica")) {
                                 campos += campoDeTextoM(atributo.replace("_", " ")) + "\n";
                             } else {
-                                campos += campoDeTexto(atributo.replace("_", " ")) + "\n";
+                                if (metodo.getClase().getAtributos().get(atributo).isPrimary()){
+                                    campos += campoDeTexto(atributo.replace("_", " "), true) + "\n";
+                                } else {
+                                    campos += campoDeTexto(atributo.replace("_", " "), false) + "\n";
+                                }
                             }
                         }
                         documento = documento.replace("<--rol-->", rol.getNombre());
@@ -567,10 +571,14 @@ public class TraductorTemplate {
                 + "</option>";
     }
 
-    public static String campoDeTexto(String nombre) {
+    public static String campoDeTexto(String nombre, boolean required) {
+        String r = "";
+        if (required){
+            r = "required";
+        }
         return "<div class=\"form-group\"><label for=\"subject\">" + nombre + "</label>"
                 + "<input class=\"form-control item\" type=\"text\" id=\"" + nombre + "\""
-                + "name=\"" + nombre + "\"></div>";
+                + "name=\"" + nombre + "\" " + r + "></div>";
     }
 
     public static String campoDeTextoM(String nombre) {
