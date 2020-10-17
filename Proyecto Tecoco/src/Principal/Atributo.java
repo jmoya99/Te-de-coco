@@ -5,11 +5,9 @@
  */
 package Principal;
 
-import java.util.HashMap;
-
 /**
  *
- * @author juan
+ * @author CJ4
  */
 public class Atributo {
     
@@ -22,7 +20,7 @@ public class Atributo {
         this.clase = clase;
     }
 
-    public boolean isIsPrimary() {
+    public boolean isPrimary() {
         return isPrimary;
     }
 

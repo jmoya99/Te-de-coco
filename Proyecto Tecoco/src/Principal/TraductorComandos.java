@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 
 /**
  *
- * @author cj4 Aportes de codigo de:
+ * @author CJ4 Aportes de codigo de:
  * https://mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/
  * https://mkyong.com/java/how-to-execute-shell-command-from-java/
  */

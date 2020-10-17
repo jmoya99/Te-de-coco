@@ -13,7 +13,7 @@ import java.io.FileWriter;
 
 /**
  *
- * @author juanpma
+ * @author CJ4
  */
 public class TraductorDjango {
 
@@ -33,7 +33,7 @@ public class TraductorDjango {
             codigoModelo += "class " + clase.getNombre() + "(models.Model):";
             for (Atributo atributo : clase.getAtributos().values()) {
                 codigoModelo += "\n\t" + atributo.getNombre() + " = models.CharField(max_length=200";
-                if (atributo.isIsPrimary()) {
+                if (atributo.isPrimary()) {
                     codigoModelo += ",primary_key=True";
                 }
                 codigoModelo += ")";
@@ -92,6 +92,7 @@ public class TraductorDjango {
             fin = documento.indexOf("]", ini);
             documento = documento.replace(documento.substring(ini, fin), documento.substring(ini, fin) + "\t'application',\n");
             documento = documento.replace("en-us", "es-co");
+            documento = documento.replace("'DIRS': [],", "'DIRS': [os.path.join(BASE_DIR,'templates')],");
             br.close();
             //Crear el archivo
             File file = new File(TraductorDjango.d + "/" + TraductorTemplate.nombreP + "/settings.py");
@@ -172,6 +173,13 @@ public class TraductorDjango {
                 + "\treturn redirect('mostrarusuario')\n\n";
         
         for (Clase clase : Clase.getClases().values()) {
+            Atributo primary = null;
+            for (Atributo atributo : clase.getAtributos().values()) {
+                if (atributo.isPrimary()){
+                    primary = atributo;
+                    break;
+                }
+            }
             // Vistas de formularios genéricos
             for (Metodo metodo : clase.getMetodos().values()) {
                 if (!(metodo.getNombre().equals("registra") || metodo.getNombre().equals("muestra")
@@ -234,7 +242,7 @@ public class TraductorDjango {
                             + "\t\tmessages.warning(request,'Inicie sesion como "
                             + rol.getNombre() + "')\n"
                             + "\t\treturn redirect('index')\n"
-                            + "\tpe = " + clase.getNombre() + ".objects.get(id = id)\n"
+                            + "\tpe = " + clase.getNombre() + ".objects.get(" + primary.getNombre() + " = id)\n"
                             + "\ttry:\n"
                             + "\t\tpe.delete()\n"
                             + "\t\tmessages.success(request,'" + clase.getNombre() + " eliminado')\n"
@@ -250,7 +258,7 @@ public class TraductorDjango {
                     // obtengo el identificaro único
                     String identificador = null;
                     for (Atributo atributo : clase.getAtributos().values()) {
-                        if (atributo.isIsPrimary()) {
+                        if (atributo.isPrimary()) {
                             identificador = atributo.getNombre();
                         }
                     }
@@ -285,7 +293,7 @@ public class TraductorDjango {
                             + "\t\tmessages.warning(request,'Inicie sesion como "
                             + rol.getNombre() + "')\n"
                             + "\t\treturn redirect('index')\n"
-                            + "\tpe = " + clase.getNombre() + ".objects.get(id = id)\n"
+                            + "\tpe = " + clase.getNombre() + ".objects.get(" + primary.getNombre() + " = id)\n"
                             + "\tif request.method == 'GET':\n"
                             + "\t\tcontext = {'" + rol.getNombre() + "':pe}\n"
                             + "\t\treturn render(request,'" + rol.getNombre() + "modifica"
@@ -293,7 +301,7 @@ public class TraductorDjango {
                             + "\telse:\n";
                     
                     for (Atributo atributo : clase.getAtributos().values()) {
-                        if (!atributo.isIsPrimary()) {
+                        if (!atributo.isPrimary()) {
                             codigoView += "\t\tpe." + atributo.getNombre() + " = "
                                     + "request.POST['" + atributo.getNombre() + "']\n";
                         }
@@ -330,9 +338,6 @@ public class TraductorDjango {
                 + "\trequest.session['rol'] = None\n"
                 + "\treturn redirect('index')";
 
-        File archivo = null;
-        FileReader fr = null;
-        BufferedReader br = null;
         try {
             //Crear el archivo
             File file = new File(d + "/application/views.py");
@@ -347,24 +352,10 @@ public class TraductorDjango {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            // En el finally cerramos el fichero, para asegurarnos
-            // que se cierra tanto si todo va bien como si salta 
-            // una excepcion.
-            try {
-                if (null != fr) {
-                    fr.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
         }
     }
 
     public static void modificarUrls() {
-        File archivo = null;
-        FileReader fr = null;
-        BufferedReader br = null;
         try {
             String documento = "from django.contrib import admin\n"
                     + "from django.urls import path\n"
@@ -402,17 +393,6 @@ public class TraductorDjango {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            // En el finally cerramos el fichero, para asegurarnos
-            // que se cierra tanto si todo va bien como si salta 
-            // una excepcion.
-            try {
-                if (null != fr) {
-                    fr.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
         }
     }
 }

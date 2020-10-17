@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author juan
+ * @author CJ4
  */
 public class Metodo {
     

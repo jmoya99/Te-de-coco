@@ -5,20 +5,16 @@
  */
 package Principal;
 
-import java.awt.EventQueue;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
- * @author juan Codigo recuperado de:
+ * @author CJ4 Codigo recuperado de:
  * https://www.discoduroderoer.es/como-usar-el-componente-jfilechooser-en-una-aplicacion-grafica-en-java/
  */
 public class InterfazDeEntrada extends JFrame {

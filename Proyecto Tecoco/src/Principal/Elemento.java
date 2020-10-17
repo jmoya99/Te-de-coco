@@ -7,7 +7,7 @@ package Principal;
 
 /**
  *
- * @author juan
+ * @author CJ4
  */
 public class Elemento {
     

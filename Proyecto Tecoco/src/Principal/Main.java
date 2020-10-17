@@ -13,7 +13,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
- * @author cj4
+ * @author CJ4
  */
 public class Main {
     

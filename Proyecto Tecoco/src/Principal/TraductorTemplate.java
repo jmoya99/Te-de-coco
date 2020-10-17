@@ -21,7 +21,7 @@ import java.util.Vector;
 
 /**
  *
- * @author juan
+ * @author CJ4
  *
  * aportes de codigo de
  * http://chuwiki.chuidiang.org/index.php?title=Lectura_y_Escritura_de_Ficheros_en_Java
@@ -209,7 +209,7 @@ public class TraductorTemplate {
                         String campos = "";
                         Vector<String> Campos = new Vector<>();
                         for (Atributo atributo : metodo.getClase().getAtributos().values()) {
-                            if (metodo.getNombre().equals("modifica") && !atributo.isIsPrimary()) {
+                            if (metodo.getNombre().equals("modifica") && !atributo.isPrimary()) {
                                 if (atributo.getNombre().equals("nombre")) {
                                     Campos.add(0, atributo.getNombre());
                                 } else {
@@ -301,7 +301,7 @@ public class TraductorTemplate {
                         documento = documento.replace("<-- Clase -->", muestra.getClase().getNombre());
 
                         for (Atributo atributo : muestra.getClase().getAtributos().values()) {
-                            if (atributo.isIsPrimary()) {
+                            if (atributo.isPrimary()) {
                                 documento = documento.replace("<-- Identificador -->", atributo.getNombre());
                             }
                         }
@@ -333,7 +333,7 @@ public class TraductorTemplate {
                         if (clase.getMetodos().containsKey("modifica") || clase.getMetodos().containsKey("elimina")) {
                             String primary = null;
                             for (Atributo Att : clase.getAtributos().values()) {
-                                if (Att.isIsPrimary()) {
+                                if (Att.isPrimary()) {
                                     primary = Att.getNombre();
                                 }
                             }
