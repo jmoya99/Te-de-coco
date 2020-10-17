@@ -1,0 +1,6 @@
+{% load static %} 
+{% include '<--rol-->.html' %}
+    <main class="page lanidng-page">
+            <img src="{% static 'assets/img/alice-pasqual-4orQSKpTKPI-unsplash.jpg' %}" width="100%" height="450">
+    </main>
+{% include 'footer.html' %}

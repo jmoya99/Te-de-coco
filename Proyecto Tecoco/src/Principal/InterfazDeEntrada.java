@@ -149,6 +149,7 @@ public class InterfazDeEntrada extends JFrame {
             TraductorTemplate.generarRM();
             TraductorTemplate.generarBEM();
             TraductorTemplate.generarMenus();
+            TraductorTemplate.generarMenuRol();
             TraductorDjango.generarModelo();
             TraductorDjango.modificarSettings();
             TraductorDjango.generarView();
