@@ -148,7 +148,7 @@ public class TraductorDjango {
                 + "\t\tpa = usuario.objects.all()\n"
                 + "\tcontext = { 'pa': pa }\n"
                 + "\treturn render(request, 'muestrausuario.html', context)\n\n"
-                + "def modificiarusuario(request, id):\n" // No tiene control de rol.
+                + "def modificausuario(request, id):\n" // No tiene control de rol.
                 + "\tpe = usuario.objects.get(id = username)\n" 
                 + "\tif request.method == 'GET':\n" 
                 + "\t\tcontext = {'usuario': pe}\n" 
@@ -162,7 +162,7 @@ public class TraductorDjango {
                 + "\t\texcept:\n" 
                 + "\t\t\tmessages.warning(request, 'Error al modificar')\n" 
                 + "\treturn redirect('mostrarusuario')\n\n"
-                + "def eliminarusuario(request, id):\n" // No tiene control de rol.
+                + "def eliminausuario(request, id):\n" // No tiene control de rol.
                 + "\tpe = usuario.objects.get(id = id)\n" 
                 + "\ttry:\n" 
                 + "\t\tpe.delete()\n" 
@@ -371,7 +371,7 @@ public class TraductorDjango {
             String documento = "from django.contrib import admin\n"
                     + "from django.urls import path\n"
                     + "from django.conf.urls import include, url\n"
-                    + "from aplicacion.views import *\n\n"
+                    + "from application.views import *\n\n"
                     + "urlpatterns = [\n"
                     + "path('admin/', admin.site.urls),\n"
                     + "url(r'^$',login,name = \"index\"),\n"
