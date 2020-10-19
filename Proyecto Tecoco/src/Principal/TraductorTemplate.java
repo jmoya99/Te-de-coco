@@ -127,6 +127,7 @@ public class TraductorTemplate {
             }
         }
     }
+    
     public static void generarIndex() {
         File archivo = null;
         FileReader fr = null;
@@ -314,12 +315,12 @@ public class TraductorTemplate {
 
                         for (String atributo : Campos) {
                             if (metodo.getNombre().equals("modifica")) {
-                                campos += campoDeTextoM(atributo.replace("_", " ")) + "\n";
+                                campos += campoDeTextoM(atributo) + "\n";
                             } else {
                                 if (metodo.getClase().getAtributos().get(atributo).isPrimary()){
-                                    campos += campoDeTexto(atributo.replace("_", " "), true) + "\n";
+                                    campos += campoDeTexto(atributo, true) + "\n";
                                 } else {
-                                    campos += campoDeTexto(atributo.replace("_", " "), false) + "\n";
+                                    campos += campoDeTexto(atributo, false) + "\n";
                                 }
                             }
                         }
@@ -664,14 +665,14 @@ public class TraductorTemplate {
         if (required){
             r = "required";
         }
-        return "<div class=\"form-group\"><label for=\"subject\">" + nombre + "</label>"
-                + "<input class=\"form-control item\" type=\"text\" id=\"" + nombre + "\""
+        return "<div class=\"form-group\"><label for=\"subject\">" + nombre.replace("_"," ") + "</label>"
+                + "<input class=\"form-control item\" type=\"text\" id=\"" + nombre + "\" "
                 + "name=\"" + nombre + "\" " + r + "></div>";
     }
 
     public static String campoDeTextoM(String nombre) {
-        return "<div class=\"form-group\"><label for=\"subject\">" + nombre + "</label>"
-                + "<input class=\"form-control item\" type=\"text\" id=\"" + nombre + "\""
+        return "<div class=\"form-group\"><label for=\"subject\">" + nombre.replace("_"," ") + "</label>"
+                + "<input class=\"form-control item\" type=\"text\" id=\"" + nombre + "\" "
                 + "name=\"" + nombre + "\" value=\"{{pe." + nombre + "}}\"></div>";
     }
 
