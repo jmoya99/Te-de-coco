@@ -127,7 +127,55 @@ public class TraductorTemplate {
             }
         }
     }
+<<<<<<< HEAD
 
+=======
+    
+    public static void generarIndex() {
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+        try {
+            // Apertura del fichero y creacion de BufferedReader para poder
+            // hacer una lectura comoda (disponer del metodo readLine()).
+            archivo = new File("Plantillas/index.txt");
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+            // Lectura del fichero
+            String documento = "", linea;
+            while ((linea = br.readLine()) != null) {
+                documento += "\n" + linea;
+            }
+            documento = documento.replaceAll("<-- TituloProyecto -->", nombreP.replace("_", " "));
+
+            //Crear el archivo
+            File file = new File(TraductorTemplate.d + "/index.html");
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(documento);
+            bw.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero, para asegurarnos
+            // que se cierra tanto si todo va bien como si salta 
+            // una excepcion.
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+    
+>>>>>>> master
     public static void generarFooter() {
         File archivo = null;
         FileReader fr = null;
@@ -194,7 +242,7 @@ public class TraductorTemplate {
                         }
                         String campos = "";
                         for (Atributo atributo : metodo.getParametros().values()) {
-                            campos += campoDeTexto(atributo.getNombre()) + "\n";
+                            campos += campoDeTexto(atributo.getNombre(), false) + "\n";
                         }
                         documento = documento.replace("<--rol-->", rol.getNombre());
                         documento = documento.replace("<--campos-->", campos);
@@ -273,7 +321,11 @@ public class TraductorTemplate {
                             if (metodo.getNombre().equals("modifica")) {
                                 campos += campoDeTextoM(atributo.replace("_", " ")) + "\n";
                             } else {
-                                campos += campoDeTexto(atributo.replace("_", " ")) + "\n";
+                                if (metodo.getClase().getAtributos().get(atributo).isPrimary()){
+                                    campos += campoDeTexto(atributo.replace("_", " "), true) + "\n";
+                                } else {
+                                    campos += campoDeTexto(atributo.replace("_", " "), false) + "\n";
+                                }
                             }
                         }
                         documento = documento.replace("<--rol-->", rol.getNombre());
@@ -612,10 +664,14 @@ public class TraductorTemplate {
                 + "</option>";
     }
 
-    public static String campoDeTexto(String nombre) {
+    public static String campoDeTexto(String nombre, boolean required) {
+        String r = "";
+        if (required){
+            r = "required";
+        }
         return "<div class=\"form-group\"><label for=\"subject\">" + nombre + "</label>"
                 + "<input class=\"form-control item\" type=\"text\" id=\"" + nombre + "\""
-                + "name=\"" + nombre + "\"></div>";
+                + "name=\"" + nombre + "\" " + r + "></div>";
     }
 
     public static String campoDeTextoM(String nombre) {
