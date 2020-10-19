@@ -328,12 +328,12 @@ public class TraductorDjango {
                 + "\t\tusername = request.POST['username']\n"
                 + "\t\tpassword = request.POST['password']\n"
                 + "\t\tif username == \"superusuario\" and password == \"12345\":\n"
-                + "\t\t\treturn render(request,'muestrausuario.html',{})\n"
-                + "\t\ttry:\n" + "\t\t\tusuario = usuario.objects.get(username = username, password = password)\n";
+                + "\t\t\treturn redirect('muestrausuario')\n"
+                + "\t\ttry:\n" + "\t\t\tusu = usuario.objects.get(username = username, password = password)\n";
         for (Rol rol : Rol.getRoles().values()) {
-            codigoView += "\t\t\tif usuario.rol == \"" + rol.getNombre() + "\":\n"
+            codigoView += "\t\t\tif usu.rol == \"" + rol.getNombre() + "\":\n"
                     + "\t\t\t\trequest.session['rol'] = \"" + rol.getNombre() + "\"\n"
-                    + "\t\t\t\treturn redirect('menu" + rol.getNombre() + "')\n";
+                    + "\t\t\t\treturn render(request, 'menu" + rol.getNombre() + ".html', {})\n";
         }
         
         codigoView += "\t\texcept:\n"
@@ -341,7 +341,7 @@ public class TraductorDjango {
                 + "\treturn render(request, \"index.html\",{})\n";
         
         // Logout
-        codigoView += "def logout(request):\n"
+        codigoView += "\ndef logout(request):\n"
                 + "\trequest.session['rol'] = None\n"
                 + "\treturn redirect('index')";
 

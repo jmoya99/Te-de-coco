@@ -127,10 +127,6 @@ public class TraductorTemplate {
             }
         }
     }
-<<<<<<< HEAD
-
-=======
-    
     public static void generarIndex() {
         File archivo = null;
         FileReader fr = null;
@@ -175,7 +171,6 @@ public class TraductorTemplate {
         }
     }
     
->>>>>>> master
     public static void generarFooter() {
         File archivo = null;
         FileReader fr = null;
