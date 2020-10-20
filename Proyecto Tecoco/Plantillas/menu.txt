@@ -7,7 +7,7 @@
                 data-aos="fade-down-left" id="navbarNav">
                 <ul class="nav navbar-nav ml-auto">
                     <-- subMenus -->
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'logout' %}">Cerrar sesi&oacute;n</a></li>
                 </ul>
             </div>
         </div>

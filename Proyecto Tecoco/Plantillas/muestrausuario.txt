@@ -18,12 +18,20 @@
                         </form>    
                             </div>
                         <div class="table-responsive table-bordered table table-hover table-bordered results">
+                            {% if messages %}
+                                {% for message in messages%}
+                                    <div class="alert alert-{{ message.tags}}" role="alert">
+                                        {{message}}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                             <table class="table table-bordered table-hover">
                                 <thead class="bill-header cs">
                                     <tr>
                                         <th> Nombre de usuario </th>
                                         <th> Rol </th>
-					<th> Gestionar </th>
+                                        <th> Contrase&ntilde;a </th>
+					                    <th> Gestionar </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -32,6 +40,7 @@
                                     <tr>
 					                    <td>{{p.username}}</td>
 					                    <td>{{p.rol}}</td>
+					                    <td>{{p.password}}</td
 					<td>  <a href="{% url 'modificausuario' id=p.username %}"><button class="btn btn-success" style="margin-left: 5px;background: rgb(36,129,167);" type="button"><p title="Modificar"><i class="fa fa-pencil" style="font-size: 15px;"></i></p></button></a>
                                             <a href="{% url 'eliminausuario' id=p.username %}"><button class="btn btn-danger" style="margin-left: 5px;" type="button"><p title="Eliminar"><i class="fa fa-trash" style="font-size: 15px;"></i></p></button></a> </td>
                                     </tr>
