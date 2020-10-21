@@ -1,0 +1,51 @@
+id,Nombre,Biblioteca de figuras,ID de página,Contenido por,Grupo,Origen de línea,Destino de la línea,Flecha de origen,Flecha de destino,Área de texto 1,Área de texto 2
+1,Página,,,,,,,,,Página 1,
+2,Almacén de datos,BPMN 2.0,1,,,,,,,cliente #identificacion nombre fecha_de_nacimiento celular ,
+3,Tarea,BPMN 2.0,1,,,,,,,empleado Muestra cliente,
+4,Tarea,BPMN 2.0,1,,,,,,,empleado REGISTRA cliente,
+5,Tarea,BPMN 2.0,1,,,,,,,gerente REGISTRA asistente,
+6,Tarea,BPMN 2.0,1,,,,,,,gerente MUESTRA asistente,
+7,Almacén de datos,BPMN 2.0,1,,,,,,,asistente #identificacion nombre fecha_de_nacimiento celular estado,
+8,Tarea,BPMN 2.0,1,,,,,,,gerente MODIFICA asistente,
+9,Tarea,BPMN 2.0,1,,,,,,,gerente ELIMINA asistente,
+10,Tarea,BPMN 2.0,1,,,,,,,gerente revisa capital,
+11,Tarea,BPMN 2.0,1,,,,,,,gerente despide empleado,
+12,Objeto de datos,BPMN 2.0,1,,,,,,,,valor
+13,Objeto de datos,BPMN 2.0,1,,,,,,,,nombre
+14,Objeto de datos,BPMN 2.0,1,,,,,,,,identificacion
+15,Tarea,BPMN 2.0,1,,,,,,,gerente despide empleado,
+16,Tarea,BPMN 2.0,1,,,,,,,empleado modifica cliente,
+17,Tarea,BPMN 2.0,1,,,,,,,gerente MUESTRA cliente,
+18,Tarea,BPMN 2.0,1,,,,,,,gerente ELIMINA cliente,
+19,Tarea,BPMN 2.0,1,,,,,,,empleado REGISTRA producto,
+20,Tarea,BPMN 2.0,1,,,,,,,empleado MUESTRA producto,
+21,Tarea,BPMN 2.0,1,,,,,,,empleado MODIFICA producto,
+22,Tarea,BPMN 2.0,1,,,,,,,empleado ELIMINA producto,
+23,Almacén de datos,BPMN 2.0,1,,,,,,,producto #codigo cantidad valor descripcion,
+24,Tarea,BPMN 2.0,1,,,,,,,empleado REGISTRA proveedor,
+25,Tarea,BPMN 2.0,1,,,,,,,empleado MUESTRA proveedor,
+26,Tarea,BPMN 2.0,1,,,,,,,empleado MODIFICA proveedor,
+27,Tarea,BPMN 2.0,1,,,,,,,gerente REGISTRA proveedor,
+28,Tarea,BPMN 2.0,1,,,,,,,gerente MUESTRA proveedor,
+29,Tarea,BPMN 2.0,1,,,,,,,gerente MODIFICA proveedor,
+30,Tarea,BPMN 2.0,1,,,,,,,gerente Elimina proveedor,
+31,Tarea,BPMN 2.0,1,,,,,,,gerente MUESTRA comentario,
+32,Tarea,BPMN 2.0,1,,,,,,,visitante MUESTRA comentario,
+33,Tarea,BPMN 2.0,1,,,,,,,visitante REGISTRA comentario,
+34,Almacén de datos,BPMN 2.0,1,,,,,,,proveedor #nit nombre_de_organizacion ubicacion telefono,
+35,Almacén de datos,BPMN 2.0,1,,,,,,,comentario #codigo descripcion,
+36,Tarea,BPMN 2.0,1,,,,,,,visitante HACE donativo,
+37,Objeto de datos,BPMN 2.0,1,,,,,,,,Cantidad
+38,Objeto de datos,BPMN 2.0,1,,,,,,,,mensaje
+39,Objeto de datos,BPMN 2.0,1,,,,,,,,posdata
+40,Tarea,BPMN 2.0,1,,,,,,,fernan pone cinco_en_la_materia,
+41,Objeto de datos,BPMN 2.0,1,,,,,,,,mensaje
+42,Objeto de datos,BPMN 2.0,1,,,,,,,,felicitacion
+43,Línea,,1,,,12,10,None,Arrow,,
+44,Línea,,1,,,14,11,None,Arrow,,
+45,Línea,,1,,,13,11,None,Arrow,,
+46,Línea,,1,,,37,36,None,Arrow,,
+47,Línea,,1,,,38,36,None,Arrow,,
+48,Línea,,1,,,39,36,None,Arrow,,
+49,Línea,,1,,,41,40,None,Arrow,,
+50,Línea,,1,,,42,40,None,Arrow,,
