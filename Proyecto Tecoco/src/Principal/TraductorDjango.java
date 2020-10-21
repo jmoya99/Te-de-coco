@@ -294,7 +294,7 @@ public class TraductorDjango {
                             + "\t\treturn redirect('index')\n"
                             + "\tpe = " + clase.getNombre() + ".objects.get(" + primary.getNombre() + " = id)\n"
                             + "\tif request.method == 'GET':\n"
-                            + "\t\tcontext = {'" + rol.getNombre() + "':pe}\n"
+                            + "\t\tcontext = {'pe':pe}\n"
                             + "\t\treturn render(request,'" + rol.getNombre() + "modifica"
                             + clase.getNombre() + ".html',context)\n"
                             + "\telse:\n";

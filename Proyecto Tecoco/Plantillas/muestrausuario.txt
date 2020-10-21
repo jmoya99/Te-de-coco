@@ -40,9 +40,11 @@
                                     <tr>
 					                    <td>{{p.username}}</td>
 					                    <td>{{p.rol}}</td>
-					                    <td>{{p.password}}</td
-					<td>  <a href="{% url 'modificausuario' id=p.username %}"><button class="btn btn-success" style="margin-left: 5px;background: rgb(36,129,167);" type="button"><p title="Modificar"><i class="fa fa-pencil" style="font-size: 15px;"></i></p></button></a>
-                                            <a href="{% url 'eliminausuario' id=p.username %}"><button class="btn btn-danger" style="margin-left: 5px;" type="button"><p title="Eliminar"><i class="fa fa-trash" style="font-size: 15px;"></i></p></button></a> </td>
+					                    <td>{{p.password}}</td>
+                                        <td>
+                                            <a href="{% url 'modificausuario' id=p.username %}"><button class="btn btn-success" style="margin-left: 5px;background: rgb(36,129,167);" type="button"><p title="Modificar"><i class="fa fa-pencil" style="font-size: 15px;"></i></p></button></a>
+                                            <a href="{% url 'eliminausuario' id=p.username %}"><button class="btn btn-danger" style="margin-left: 5px;" type="button"><p title="Eliminar"><i class="fa fa-trash" style="font-size: 15px;"></i></p></button></a>
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 {% endif %}
