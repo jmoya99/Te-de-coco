@@ -172,7 +172,7 @@ public class TraductorDjango {
                 + "\tpe = usuario.objects.get(username = id)\n" 
                 + "\ttry:\n" 
                 + "\t\tpe.delete()\n" 
-                + "\t\tmessages.success(request, 'Usuario eliminada')\n" 
+                + "\t\tmessages.success(request, 'Usuario eliminado')\n" 
                 + "\texcept:\n" 
                 + "\t\tmessages.warning(request, 'Error al eliminar')\n" 
                 + "\treturn redirect('muestrausuario')\n\n";
@@ -259,14 +259,7 @@ public class TraductorDjango {
             }
             // Vistas de muestra
             if (clase.getMetodos().containsKey("muestra")) {
-                for (Rol rol : clase.getMetodos().get("muestra").getRoles().values()) {
-                    // obtengo el identificaro único
-                    String identificador = null;
-                    for (Atributo atributo : clase.getAtributos().values()) {
-                        if (atributo.isPrimary()) {
-                            identificador = atributo.getNombre();
-                        }
-                    }
+                for (Rol rol : clase.getMetodos().get("muestra").getRoles().values()) {               
                     codigoView += "def " + rol.getNombre() + "muestra" + clase.getNombre()
                             + "(request):\n"
                             + "\tif request.session['rol'] is None:\n"
@@ -276,9 +269,9 @@ public class TraductorDjango {
                             + "\t\tmessages.warning(request,'Inicie sesion como "
                             + rol.getNombre() + "')\n"
                             + "\t\treturn redirect('index')\n"
-                            + "\tif request.method == 'POST' and request.POST['" + identificador + "']:\n"
+                            + "\tif request.method == 'POST' and request.POST['" + primary.getNombre() + "']:\n"
                             + "\t\tpa = " + clase.getNombre() + ".objects.filter(" + primary.getNombre() 
-                            + " = request.POST['" + identificador + "'])\n"
+                            + " = request.POST['" + primary.getNombre() + "'])\n"
                             + "\telse:\n"
                             + "\t\tpa = " + clase.getNombre() + ".objects.all()\n"
                             + "\tcontext = { 'pa': pa }\n"
