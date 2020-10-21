@@ -57,7 +57,7 @@ public class TraductorTemplate {
                 }
                 documento = documento.replace("<--rol-->", rol.getNombre());
                 //Crear el archivo
-                File file = new File(TraductorTemplate.d + "/menu" + rol.getNombre() +".html");
+                File file = new File(TraductorTemplate.d + "/menu" + rol.getNombre() + ".html");
                 // Si el archivo no existe es creado
                 if (!file.exists()) {
                     file.createNewFile();
@@ -127,7 +127,7 @@ public class TraductorTemplate {
             }
         }
     }
-    
+
     public static void generarIndex() {
         File archivo = null;
         FileReader fr = null;
@@ -171,7 +171,7 @@ public class TraductorTemplate {
             }
         }
     }
-    
+
     public static void generarFooter() {
         File archivo = null;
         FileReader fr = null;
@@ -217,57 +217,59 @@ public class TraductorTemplate {
     }
 
     public static void generarFormulariosGenericos() {
-        for (Rol rol : Rol.roles.values()) {
-            for (Metodo metodo : rol.getMetodos().values()) {
-                if (!(metodo.getNombre().equals("registra") || metodo.getNombre().equals("muestra")
-                        || metodo.getNombre().equals("modifica") || metodo.getNombre().equals("elimina")
-                        || metodo.getNombre().equals("busca"))) {
-                    File archivo = null;
-                    FileReader fr = null;
-                    BufferedReader br = null;
-                    try {
-                        // Apertura del fichero y creacion de BufferedReader para poder
-                        // hacer una lectura comoda (disponer del metodo readLine()).
-                        archivo = new File("Plantillas/formulario.txt");
-                        fr = new FileReader(archivo);
-                        br = new BufferedReader(fr);
-                        // Lectura del fichero
-                        String documento = "", linea;
-                        while ((linea = br.readLine()) != null) {
-                            documento += "\n" + linea;
-                        }
-                        String campos = "";
-                        for (Atributo atributo : metodo.getParametros().values()) {
-                            campos += campoDeTexto(atributo.getNombre(), false) + "\n";
-                        }
-                        documento = documento.replace("<--rol-->", rol.getNombre());
-                        documento = documento.replace("<--campos-->", campos);
-                        documento = documento.replace("<--accion-->", metodo.getNombre());
-                        documento = documento.replace("<--titulo-->", metodo.getNombre() + " " + metodo.getClase().getNombre());
-
-                        //Crear el archivo
-                        File file = new File(TraductorTemplate.d + "/" + rol.getNombre() + metodo.getNombre() + metodo.getClase().getNombre() + ".html");
-                        // Si el archivo no existe es creado
-                        if (!file.exists()) {
-                            file.createNewFile();
-                        }
-                        FileWriter fw = new FileWriter(file);
-                        BufferedWriter bw = new BufferedWriter(fw);
-                        bw.write(documento);
-                        bw.close();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-                        // En el finally cerramos el fichero, para asegurarnos
-                        // que se cierra tanto si todo va bien como si salta 
-                        // una excepcion.
+        for (Clase clase : Clase.clases.values()) {
+            for (Metodo metodo : clase.getMetodos().values()) {
+                for (Rol rol : metodo.getRoles().values()) {
+                    if (!(metodo.getNombre().equals("registra") || metodo.getNombre().equals("muestra")
+                            || metodo.getNombre().equals("modifica") || metodo.getNombre().equals("elimina")
+                            || metodo.getNombre().equals("busca"))) {
+                        File archivo = null;
+                        FileReader fr = null;
+                        BufferedReader br = null;
                         try {
-                            if (null != fr) {
-                                fr.close();
+                            // Apertura del fichero y creacion de BufferedReader para poder
+                            // hacer una lectura comoda (disponer del metodo readLine()).
+                            archivo = new File("Plantillas/formulario.txt");
+                            fr = new FileReader(archivo);
+                            br = new BufferedReader(fr);
+                            // Lectura del fichero
+                            String documento = "", linea;
+                            while ((linea = br.readLine()) != null) {
+                                documento += "\n" + linea;
                             }
-                        } catch (Exception e2) {
-                            e2.printStackTrace();
+                            String campos = "";
+                            for (Atributo atributo : metodo.getParametros().values()) {
+                                campos += campoDeTexto(atributo.getNombre(), false) + "\n";
+                            }
+                            documento = documento.replace("<--rol-->", rol.getNombre());
+                            documento = documento.replace("<--campos-->", campos);
+                            documento = documento.replace("<--accion-->", metodo.getNombre());
+                            documento = documento.replace("<--titulo-->", metodo.getNombre() + " " + clase.getNombre());
+
+                            //Crear el archivo
+                            File file = new File(TraductorTemplate.d + "/" + rol.getNombre() + metodo.getNombre() + clase.getNombre() + ".html");
+                            // Si el archivo no existe es creado
+                            if (!file.exists()) {
+                                file.createNewFile();
+                            }
+                            FileWriter fw = new FileWriter(file);
+                            BufferedWriter bw = new BufferedWriter(fw);
+                            bw.write(documento);
+                            bw.close();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            // En el finally cerramos el fichero, para asegurarnos
+                            // que se cierra tanto si todo va bien como si salta 
+                            // una excepcion.
+                            try {
+                                if (null != fr) {
+                                    fr.close();
+                                }
+                            } catch (Exception e2) {
+                                e2.printStackTrace();
+                            }
                         }
                     }
                 }
@@ -317,7 +319,7 @@ public class TraductorTemplate {
                             if (metodo.getNombre().equals("modifica")) {
                                 campos += campoDeTextoM(atributo) + "\n";
                             } else {
-                                if (metodo.getClase().getAtributos().get(atributo).isPrimary()){
+                                if (metodo.getClase().getAtributos().get(atributo).isPrimary()) {
                                     campos += campoDeTexto(atributo, true) + "\n";
                                 } else {
                                     campos += campoDeTexto(atributo, false) + "\n";
@@ -662,16 +664,16 @@ public class TraductorTemplate {
 
     public static String campoDeTexto(String nombre, boolean required) {
         String r = "";
-        if (required){
+        if (required) {
             r = "required";
         }
-        return "<div class=\"form-group\"><label for=\"subject\">" + nombre.replace("_"," ") + "</label>"
+        return "<div class=\"form-group\"><label for=\"subject\">" + nombre.replace("_", " ") + "</label>"
                 + "<input class=\"form-control item\" type=\"text\" id=\"" + nombre + "\" "
                 + "name=\"" + nombre + "\" " + r + "></div>";
     }
 
     public static String campoDeTextoM(String nombre) {
-        return "<div class=\"form-group\"><label for=\"subject\">" + nombre.replace("_"," ") + "</label>"
+        return "<div class=\"form-group\"><label for=\"subject\">" + nombre.replace("_", " ") + "</label>"
                 + "<input class=\"form-control item\" type=\"text\" id=\"" + nombre + "\" "
                 + "name=\"" + nombre + "\" value=\"{{pe." + nombre + "}}\"></div>";
     }

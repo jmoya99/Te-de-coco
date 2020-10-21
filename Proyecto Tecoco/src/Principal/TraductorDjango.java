@@ -19,7 +19,7 @@ public class TraductorDjango {
 
     public static String d = "Resultado/";
     public static String nombreP = "";
-    
+
     public static void direccionProyecto() {
         d += nombreP;
     }
@@ -148,39 +148,39 @@ public class TraductorDjango {
                 + "\t\treturn redirect('muestrausuario')\n"
                 + "\treturn render(request, 'registrausuario.html', {})\n\n"
                 + "def muestrausuario(request):\n" // No tiene control de rol.
-                + "\tif request.method == 'POST' and request.POST['username']:\n" 
+                + "\tif request.method == 'POST' and request.POST['username']:\n"
                 + "\t\tpa = usuario.objects.filter(username = request.POST['username'])\n"
                 + "\telse:\n"
                 + "\t\tpa = usuario.objects.all()\n"
                 + "\tcontext = { 'pa': pa }\n"
                 + "\treturn render(request, 'muestrausuario.html', context)\n\n"
                 + "def modificausuario(request, id):\n" // No tiene control de rol.
-                + "\tpe = usuario.objects.get(username = id)\n" 
-                + "\tif request.method == 'GET':\n" 
-                + "\t\tcontext = {'usuario': pe}\n" 
-                + "\t\treturn render(request, 'modificausuario.html', context)\n" 
-                + "\telse:\n" 
+                + "\tpe = usuario.objects.get(username = id)\n"
+                + "\tif request.method == 'GET':\n"
+                + "\t\tcontext = {'usuario': pe}\n"
+                + "\t\treturn render(request, 'modificausuario.html', context)\n"
+                + "\telse:\n"
                 + "\t\tpe.password = request.POST['password']\n"
-                + "\t\tpe.rol = request.POST['rol']\n" 
-                + "\t\ttry:\n" 
-                + "\t\t\tpe.save()\n" 
-                + "\t\t\tmessages.success(request, 'Usuario modificado')\n" 
-                + "\t\texcept:\n" 
-                + "\t\t\tmessages.warning(request, 'Error al modificar')\n" 
+                + "\t\tpe.rol = request.POST['rol']\n"
+                + "\t\ttry:\n"
+                + "\t\t\tpe.save()\n"
+                + "\t\t\tmessages.success(request, 'Usuario modificado')\n"
+                + "\t\texcept:\n"
+                + "\t\t\tmessages.warning(request, 'Error al modificar')\n"
                 + "\treturn redirect('muestrausuario')\n\n"
                 + "def eliminausuario(request, id):\n" // No tiene control de rol.
-                + "\tpe = usuario.objects.get(username = id)\n" 
-                + "\ttry:\n" 
-                + "\t\tpe.delete()\n" 
-                + "\t\tmessages.success(request, 'Usuario eliminado')\n" 
-                + "\texcept:\n" 
-                + "\t\tmessages.warning(request, 'Error al eliminar')\n" 
+                + "\tpe = usuario.objects.get(username = id)\n"
+                + "\ttry:\n"
+                + "\t\tpe.delete()\n"
+                + "\t\tmessages.success(request, 'Usuario eliminado')\n"
+                + "\texcept:\n"
+                + "\t\tmessages.warning(request, 'Error al eliminar')\n"
                 + "\treturn redirect('muestrausuario')\n\n";
-        
+
         for (Clase clase : Clase.getClases().values()) {
             Atributo primary = null;
             for (Atributo atributo : clase.getAtributos().values()) {
-                if (atributo.isPrimary()){
+                if (atributo.isPrimary()) {
                     primary = atributo;
                     break;
                 }
@@ -191,15 +191,15 @@ public class TraductorDjango {
                         || metodo.getNombre().equals("modifica") || metodo.getNombre().equals("elimina")
                         || metodo.getNombre().equals("busca"))) {
                     for (Rol rol : metodo.getRoles().values()) {
-                        codigoView += "def " + rol.getNombre() + metodo.getNombre() 
-                                + clase.getNombre() + "(request):\n" 
-                                + "\tif request.session['rol'] is None:\n" 
-                                + "\t\tmessages.warning(request,'Por favor inicie sesion')\n" 
-                                + "\t\treturn redirect('index')\n" 
-                                + "\telif request.session['rol'] != '" + rol.getNombre() + "':\n" 
-                                + "\t\tmessages.warning(request,'Inicie sesion como " + rol.getNombre() + "')\n" 
-                                + "\t\treturn redirect('index')\n" 
-                                + "\treturn render(request,'" + rol.getNombre() + metodo.getNombre() 
+                        codigoView += "def " + rol.getNombre() + metodo.getNombre()
+                                + clase.getNombre() + "(request):\n"
+                                + "\tif request.session['rol'] is None:\n"
+                                + "\t\tmessages.warning(request,'Por favor inicie sesion')\n"
+                                + "\t\treturn redirect('index')\n"
+                                + "\telif request.session['rol'] != '" + rol.getNombre() + "':\n"
+                                + "\t\tmessages.warning(request,'Inicie sesion como " + rol.getNombre() + "')\n"
+                                + "\t\treturn redirect('index')\n"
+                                + "\treturn render(request,'" + rol.getNombre() + metodo.getNombre()
                                 + clase.getNombre() + ".html',{})\n\n";
                     }
                 }
@@ -259,7 +259,7 @@ public class TraductorDjango {
             }
             // Vistas de muestra
             if (clase.getMetodos().containsKey("muestra")) {
-                for (Rol rol : clase.getMetodos().get("muestra").getRoles().values()) {               
+                for (Rol rol : clase.getMetodos().get("muestra").getRoles().values()) {
                     codigoView += "def " + rol.getNombre() + "muestra" + clase.getNombre()
                             + "(request):\n"
                             + "\tif request.session['rol'] is None:\n"
@@ -270,7 +270,7 @@ public class TraductorDjango {
                             + rol.getNombre() + "')\n"
                             + "\t\treturn redirect('index')\n"
                             + "\tif request.method == 'POST' and request.POST['" + primary.getNombre() + "']:\n"
-                            + "\t\tpa = " + clase.getNombre() + ".objects.filter(" + primary.getNombre() 
+                            + "\t\tpa = " + clase.getNombre() + ".objects.filter(" + primary.getNombre()
                             + " = request.POST['" + primary.getNombre() + "'])\n"
                             + "\telse:\n"
                             + "\t\tpa = " + clase.getNombre() + ".objects.all()\n"
@@ -279,7 +279,7 @@ public class TraductorDjango {
                             + clase.getNombre() + ".html', context)\n\n";
                 }
             }
-            
+
             // Vistas de modifica
             if (clase.getMetodos().containsKey("modifica")) {
                 for (Rol rol : clase.getMetodos().get("modifica").getRoles().values()) {
@@ -298,7 +298,7 @@ public class TraductorDjango {
                             + "\t\treturn render(request,'" + rol.getNombre() + "modifica"
                             + clase.getNombre() + ".html',context)\n"
                             + "\telse:\n";
-                    
+
                     for (Atributo atributo : clase.getAtributos().values()) {
                         if (!atributo.isPrimary()) {
                             codigoView += "\t\tpe." + atributo.getNombre() + " = "
@@ -328,11 +328,11 @@ public class TraductorDjango {
                     + "\t\t\t\trequest.session['rol'] = \"" + rol.getNombre() + "\"\n"
                     + "\t\t\t\treturn render(request, 'menu" + rol.getNombre() + ".html', {})\n";
         }
-        
+
         codigoView += "\t\texcept:\n"
                 + "\t\t\tmessages.warning(request,'Usuario o contraseña incorrectos')\n"
                 + "\treturn render(request, \"index.html\",{})\n";
-        
+
         // Logout
         codigoView += "\ndef logout(request):\n"
                 + "\trequest.session['rol'] = None\n"
@@ -369,13 +369,15 @@ public class TraductorDjango {
                     + "url(r'^muestrausuario/',muestrausuario,name = \"muestrausuario\"),\n"
                     + "url(r'^modificausuario/(?P<id>\\w+)/$',modificausuario,name = \"modificausuario\"),\n"
                     + "url(r'^eliminausuario/(?P<id>\\w+)/$',eliminausuario,name = \"eliminausuario\"),\n";
-            for (Rol rol : Rol.roles.values()) {
-                for (Metodo metodo : rol.getMetodos().values()) {
-                    String nombre = rol.getNombre() + metodo.getNombre() + metodo.getClase().getNombre();
-                    if (metodo.getNombre().equals("elimina") || metodo.getNombre().equals("modifica")) {
-                        documento += "url(r'^" + nombre + "/(?P<id>\\w+)/$'," + nombre + ",name = \"" + nombre + "\"),\n";
-                    } else if (!metodo.getNombre().equals("busca")) {
-                        documento += "url(r'^" + nombre + "/'," + nombre + ",name = \"" + nombre + "\"),\n";
+            for (Clase clase : Clase.clases.values()) {
+                for (Metodo metodo : clase.getMetodos().values()) {
+                    for (Rol rol : metodo.getRoles().values()) {
+                        String nombre = rol.getNombre() + metodo.getNombre() + clase.getNombre();
+                        if (metodo.getNombre().equals("elimina") || metodo.getNombre().equals("modifica")) {
+                            documento += "url(r'^" + nombre + "/(?P<id>\\w+)/$'," + nombre + ",name = \"" + nombre + "\"),\n";
+                        } else if (!metodo.getNombre().equals("busca")) {
+                            documento += "url(r'^" + nombre + "/'," + nombre + ",name = \"" + nombre + "\"),\n";
+                        }
                     }
                 }
             }
