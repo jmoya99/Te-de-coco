@@ -279,91 +279,93 @@ public class TraductorTemplate {
 
     // función para generar formulario de registro y modificación
     public static void generarRM() {
-        for (Rol rol : Rol.roles.values()) {
-            for (Metodo metodo : rol.getMetodos().values()) {
-                if (metodo.getNombre().equals("registra") || metodo.getNombre().equals("modifica")) {
-                    File archivo = null;
-                    FileReader fr = null;
-                    BufferedReader br = null;
-                    try {
-                        // Apertura del fichero y creacion de BufferedReader para poder
-                        // hacer una lectura comoda (disponer del metodo readLine()).
-                        archivo = new File("Plantillas/formulario.txt");
-                        fr = new FileReader(archivo);
-                        br = new BufferedReader(fr);
-                        // Lectura del fichero
-                        String documento = "", linea;
-                        while ((linea = br.readLine()) != null) {
-                            documento += "\n" + linea;
-                        }
-                        String campos = "";
-                        Vector<String> Campos = new Vector<>();
-                        for (Atributo atributo : metodo.getClase().getAtributos().values()) {
-                            if (metodo.getNombre().equals("modifica") && !atributo.isPrimary()) {
-                                if (atributo.getNombre().equals("nombre")) {
-                                    Campos.add(0, atributo.getNombre());
-                                } else {
-                                    Campos.add(atributo.getNombre());
-                                }
-                            } else if (metodo.getNombre().equals("registra")) {
-                                if (atributo.getNombre().equals("nombre") || atributo.getNombre().equals("identificacion")) {
-                                    Campos.add(0, atributo.getNombre());
-                                } else {
-                                    Campos.add(atributo.getNombre());
-                                }
-                            }
-
-                        }
-
-                        for (String atributo : Campos) {
-                            if (metodo.getNombre().equals("modifica")) {
-                                campos += campoDeTextoM(atributo) + "\n";
-                            } else {
-                                if (metodo.getClase().getAtributos().get(atributo).isPrimary()) {
-                                    campos += campoDeTexto(atributo, true) + "\n";
-                                } else {
-                                    campos += campoDeTexto(atributo, false) + "\n";
-                                }
-                            }
-                        }
-                        documento = documento.replace("<--rol-->", rol.getNombre());
-                        documento = documento.replace("<--campos-->", campos);
-
-                        switch (metodo.getNombre()) {
-                            case "modifica":
-                                documento = documento.replace("<--titulo-->", "MODIFICAR " + metodo.getClase().getNombre());
-                                documento = documento.replace("<--accion-->", "Modificar");
-                                break;
-                            case "registra":
-                                documento = documento.replace("<--titulo-->", "REGISTRAR " + metodo.getClase().getNombre());
-                                documento = documento.replace("<--accion-->", "Registrar");
-                                break;
-                        }
-
-                        //Crear el archivo
-                        File file = new File(TraductorTemplate.d + "/" + rol.getNombre() + metodo.getNombre()
-                                + metodo.getClase().getNombre() + ".html");
-                        // Si el archivo no existe es creado
-                        if (!file.exists()) {
-                            file.createNewFile();
-                        }
-                        FileWriter fw = new FileWriter(file);
-                        BufferedWriter bw = new BufferedWriter(fw);
-                        bw.write(documento);
-                        bw.close();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-                        // En el finally cerramos el fichero, para asegurarnos
-                        // que se cierra tanto si todo va bien como si salta 
-                        // una excepcion.
+        for (Clase clase : Clase.clases.values()) {
+            for (Metodo metodo : clase.getMetodos().values()) {
+                for (Rol rol : metodo.getRoles().values()) {
+                    if (metodo.getNombre().equals("registra") || metodo.getNombre().equals("modifica")) {
+                        File archivo = null;
+                        FileReader fr = null;
+                        BufferedReader br = null;
                         try {
-                            if (null != fr) {
-                                fr.close();
+                            // Apertura del fichero y creacion de BufferedReader para poder
+                            // hacer una lectura comoda (disponer del metodo readLine()).
+                            archivo = new File("Plantillas/formulario.txt");
+                            fr = new FileReader(archivo);
+                            br = new BufferedReader(fr);
+                            // Lectura del fichero
+                            String documento = "", linea;
+                            while ((linea = br.readLine()) != null) {
+                                documento += "\n" + linea;
                             }
-                        } catch (Exception e2) {
-                            e2.printStackTrace();
+                            String campos = "";
+                            Vector<String> Campos = new Vector<>();
+                            for (Atributo atributo : metodo.getClase().getAtributos().values()) {
+                                if (metodo.getNombre().equals("modifica") && !atributo.isPrimary()) {
+                                    if (atributo.getNombre().equals("nombre")) {
+                                        Campos.add(0, atributo.getNombre());
+                                    } else {
+                                        Campos.add(atributo.getNombre());
+                                    }
+                                } else if (metodo.getNombre().equals("registra")) {
+                                    if (atributo.getNombre().equals("nombre") || atributo.getNombre().equals("identificacion")) {
+                                        Campos.add(0, atributo.getNombre());
+                                    } else {
+                                        Campos.add(atributo.getNombre());
+                                    }
+                                }
+
+                            }
+
+                            for (String atributo : Campos) {
+                                if (metodo.getNombre().equals("modifica")) {
+                                    campos += campoDeTextoM(atributo) + "\n";
+                                } else {
+                                    if (metodo.getClase().getAtributos().get(atributo).isPrimary()) {
+                                        campos += campoDeTexto(atributo, true) + "\n";
+                                    } else {
+                                        campos += campoDeTexto(atributo, false) + "\n";
+                                    }
+                                }
+                            }
+                            documento = documento.replace("<--rol-->", rol.getNombre());
+                            documento = documento.replace("<--campos-->", campos);
+
+                            switch (metodo.getNombre()) {
+                                case "modifica":
+                                    documento = documento.replace("<--titulo-->", "MODIFICAR " + metodo.getClase().getNombre());
+                                    documento = documento.replace("<--accion-->", "Modificar");
+                                    break;
+                                case "registra":
+                                    documento = documento.replace("<--titulo-->", "REGISTRAR " + metodo.getClase().getNombre());
+                                    documento = documento.replace("<--accion-->", "Registrar");
+                                    break;
+                            }
+
+                            //Crear el archivo
+                            File file = new File(TraductorTemplate.d + "/" + rol.getNombre() + metodo.getNombre()
+                                    + metodo.getClase().getNombre() + ".html");
+                            // Si el archivo no existe es creado
+                            if (!file.exists()) {
+                                file.createNewFile();
+                            }
+                            FileWriter fw = new FileWriter(file);
+                            BufferedWriter bw = new BufferedWriter(fw);
+                            bw.write(documento);
+                            bw.close();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            // En el finally cerramos el fichero, para asegurarnos
+                            // que se cierra tanto si todo va bien como si salta 
+                            // una excepcion.
+                            try {
+                                if (null != fr) {
+                                    fr.close();
+                                }
+                            } catch (Exception e2) {
+                                e2.printStackTrace();
+                            }
                         }
                     }
                 }
